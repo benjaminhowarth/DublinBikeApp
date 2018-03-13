@@ -13,7 +13,7 @@ def write_to_file(text, now):
         f.write(text)
         
 def write_to_db(text):
-    pass
+    query = "INSERT INTO  VALUES (%s, %s, %s);"
 
 def main():
     while True:
