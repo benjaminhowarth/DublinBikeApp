@@ -60,3 +60,20 @@ try:
 except Exception as e:
     print(e)
 
+sql = """
+CREATE TABLE IF NOT EXISTS weather (
+main VARCHAR(256),
+description VARCHAR(256),
+current_temperature FLOAT(4),
+pressure INTEGER,
+wind_speed FLOAT(4),
+visibility DOUBLE,
+sunrise DOUBLE,
+sunset DOUBLE
+)
+"""
+try:
+    res = engine.execute(sql)
+    print(res.fetchall())
+except Exception as e:
+    print(e)
