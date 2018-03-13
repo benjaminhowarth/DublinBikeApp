@@ -11,6 +11,9 @@ STATIONS="https://api.jcdecaux.com/vls/v1/stations"
 def write_to_file(text, now):
     with open("data/bikes_{}".format(now).replace(" ", "_"), "w") as f:
         f.write(text)
+        
+def write_to_db(text):
+    pass
 
 def main():
     while True:
