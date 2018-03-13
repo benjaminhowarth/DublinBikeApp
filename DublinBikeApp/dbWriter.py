@@ -58,5 +58,5 @@ try:
     res = engine.execute(sql)
     print(res.fetchall())
 except Exception as e:
-    print(e)
+    print(e)#, traceback.format_exc())
 
