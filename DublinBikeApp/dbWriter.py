@@ -71,6 +71,7 @@ def write_to_db(file):
         count = 0
         while count < len(myJson):
             write_to_static(myJson[count])
+            write_to_dynamic(myJson[count])
             count += 1    
     else:
         print("Error - file path incorrect.")
@@ -83,6 +84,15 @@ def write_to_static(myJson):
     ins.execute(number=myJson['number'], contract_name=myJson['contract_name'], name=myJson['name'], 
                 address=myJson['address'], position_lat=myJson['position']['lat'], position_lng=myJson['position']['lng'], 
                 banking=myJson['banking'], bonus=myJson['bonus'])
+    
+def write_to_dynamic(myJson):
+    metadata = MetaData(bind=engine)
+    static = Table('dynamic', metadata, autoload=True)
+
+    ins = dynamic.insert()
+    ins.execute(number=myJson['number'], status=myJson['status'], bike_stands=myJson['bike_stands'], 
+                available_bike_stands=myJson['available_bike_stands'], available_bikes=myJson['available_bikes'], last_update=myJson['last_update'] 
+                )
         
 write_to_db(file)
 
