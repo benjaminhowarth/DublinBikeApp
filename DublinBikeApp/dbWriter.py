@@ -6,6 +6,8 @@ import os
 import requests
 import time
 import json
+import pandas
+from pandas.io.json import json_normalize
 
 # Code taken from Aonghus's Notes
 
@@ -19,13 +21,16 @@ engine = create_engine("mysql+mysqldb://{}:{}@{}:{}/{}"
                        .format(USER, PASSWORD, URI, PORT, DB), echo=True)
 
 
-def create_tables():
+def create_database():
     sql = """
-    CREATE DATABASE IF NOT EXISTS dublinbikedb;
-     
-    """     
-    engine.execute(sql)
-     
+    CREATE DATABASE IF NOT EXISTS dublinbikedb;     
+    """
+    try:   
+        engine.execute(sql)
+    except Exception as e:
+        print(e)
+
+def createStaticTable():     
     sql = """
     CREATE TABLE IF NOT EXISTS static (
     number INTEGER NOT NULL,
@@ -40,11 +45,11 @@ def create_tables():
     )
     """
     try:
-        res = engine.execute(sql)
-        print(res.fetchall())
+        engine.execute(sql)
     except Exception as e:
         print(e)
-     
+
+def createDynamicTable():
     sql = """
     CREATE TABLE IF NOT EXISTS dynamic (
     number INTEGER,
@@ -52,47 +57,60 @@ def create_tables():
     bike_stands INTEGER,
     available_bike_stands INTEGER,
     available_bikes INTEGER,
-    last_update INTEGER
+    last_update BIGINT
     )
     """
     try:
-        res = engine.execute(sql)
-        print(res.fetchall())
+        engine.execute(sql)
+    except Exception as e:
+        print(e)
+        
+def createWeatherTable():
+    sql = """
+    CREATE TABLE IF NOT EXISTS weather (
+    main VARCHAR(256),
+    description VARCHAR(256),
+    current_temperature FLOAT(4),
+    pressure INTEGER,
+    wind_speed FLOAT(4),
+    visibility DOUBLE,
+    sunrise DOUBLE,
+    sunset DOUBLE
+    )
+    """
+    try:
+        engine.execute(sql)
+    except Exception as e:
+        print(e)
+        
+def dropTable(tableName):
+    sql = "DROP TABLE "+tableName
+    try:
+        engine.execute(sql)
     except Exception as e:
         print(e)
 
-file = "./data/bikes_2018-03-12_14:18:22.696111"
+file = "./data/bikes_2018-03-12_14:33:30.218089"
 
 def write_to_db(file):
     if os.path.isfile(file) == True:
         myFile = open(file, 'r')
         myFile = myFile.read()
         myJson = json.loads(myFile)
-        count = 0
-        while count < len(myJson):
-            write_to_static(myJson[count])
-            write_to_dynamic(myJson[count])
-            count += 1    
+        df = json_normalize(myJson, sep='_')
+        write_to_static(df)
     else:
         print("Error - file path incorrect.")
 
-def write_to_static(myJson):
-    metadata = MetaData(bind=engine)
-    static = Table('static', metadata, autoload=True)
-
-    ins = static.insert()
-    ins.execute(number=myJson['number'], contract_name=myJson['contract_name'], name=myJson['name'], 
-                address=myJson['address'], position_lat=myJson['position']['lat'], position_lng=myJson['position']['lng'], 
-                banking=myJson['banking'], bonus=myJson['bonus'])
+def write_to_static(df):
+    df_static = df[['number', 'contract_name', 'name', 'address', 
+                    'position_lat', 'position_lng', 'banking', 'bonus']]
+    df_static.to_sql('static', engine, if_exists='replace', index=False)
     
-def write_to_dynamic(myJson):
-    metadata = MetaData(bind=engine)
-    static = Table('dynamic', metadata, autoload=True)
-
-    ins = dynamic.insert()
-    ins.execute(number=myJson['number'], status=myJson['status'], bike_stands=myJson['bike_stands'], 
-                available_bike_stands=myJson['available_bike_stands'], available_bikes=myJson['available_bikes'], last_update=myJson['last_update'] 
-                )
+def write_to_dynamic(df):
+    df_dynamic = df[['number', 'status', 'bike_stands', 'available_bike_stands', 
+                     'available_bikes', 'last_update']]   
+    df_dynamic.to_sql('dynamic', engine, if_exists='append', index=False)
         
 write_to_db(file)
 
