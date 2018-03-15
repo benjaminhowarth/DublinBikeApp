@@ -126,7 +126,7 @@ def write_to_weather(input):
     
 def dataDir_to_RDB():
     for file in glob.glob("./data/*"):
-        write_to_static(openFile(file))
+        write_to_dynamic(openFile(file))
         
 def weatherDir_to_RDB():
     for file in glob.glob("./weatherdata/*"):
