@@ -3,8 +3,6 @@ from sqlalchemy import *
 import traceback
 import glob
 import os
-import requests
-import time
 import json
 import pandas
 from pandas.io.json import json_normalize
@@ -70,12 +68,13 @@ def createWeatherTable():
     CREATE TABLE IF NOT EXISTS weather (
     main VARCHAR(256),
     description VARCHAR(256),
-    current_temperature FLOAT(4),
+    temperature FLOAT(4),
     pressure INTEGER,
     wind_speed FLOAT(4),
     visibility DOUBLE,
     sunrise DOUBLE,
-    sunset DOUBLE
+    sunset DOUBLE,
+    time BIGINT
     )
     """
     try:
@@ -90,17 +89,18 @@ def dropTable(tableName):
     except Exception as e:
         print(e)
 
-file = "./data/bikes_2018-03-12_14:33:30.218089"
-
-def write_to_db(file):
+def openFile(file):
     if os.path.isfile(file) == True:
         myFile = open(file, 'r')
         myFile = myFile.read()
-        myJson = json.loads(myFile)
-        df = json_normalize(myJson, sep='_')
-        write_to_static(df)
+        return myFile
     else:
         print("Error - file path incorrect.")
+        
+def makeDF(myFile):
+    myJson = json.loads(myFile)
+    df = json_normalize(myJson, sep='_')
+    return df
 
 def write_to_static(df):
     df_static = df[['number', 'contract_name', 'name', 'address', 
@@ -111,8 +111,16 @@ def write_to_dynamic(df):
     df_dynamic = df[['number', 'status', 'bike_stands', 'available_bike_stands', 
                      'available_bikes', 'last_update']]   
     df_dynamic.to_sql('dynamic', engine, if_exists='append', index=False)
-        
-write_to_db(file)
 
-#
+def write_to_weather(df):
+    df2 = json_normalize(df['weather'][0])
+    df2 = df2[['main', 'description']]
+    df1 = df[['main_temp', 'main_pressure', 'wind_speed', 'visibility', 'sys_sunrise', 'sys_sunset', 'dt']]
+    df_weather = pandas.concat([df2, df1], axis=1)
+    df_weather = df_weather.rename(columns={'main_temp': 'temperature', 'main_pressure': 'pressure', 
+                                            'sys_sunrise': 'sunrise', 'sys_sunset': 'sunset', 'dt': 'time'})
+    df_weather.to_sql('weather', engine, if_exists='append', index=False)
+    
+write_to_weather(makeDF(openFile('./weatherData/weather_2018-03-13_15:15:00.612236')))
+    
 
