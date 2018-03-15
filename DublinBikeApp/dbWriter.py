@@ -97,8 +97,8 @@ def openFile(file):
     else:
         print("Error - file path incorrect.")
         
-def makeDF(myFile):
-    myJson = json.loads(myFile)
+def makeDF(input):
+    myJson = json.loads(input)
     df = json_normalize(myJson, sep='_')
     return df
 
@@ -121,6 +121,6 @@ def write_to_weather(df):
                                             'sys_sunrise': 'sunrise', 'sys_sunset': 'sunset', 'dt': 'time'})
     df_weather.to_sql('weather', engine, if_exists='append', index=False)
     
-write_to_weather(makeDF(openFile('./weatherData/weather_2018-03-13_15:15:00.612236')))
+
     
 
