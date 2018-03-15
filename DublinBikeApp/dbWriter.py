@@ -102,17 +102,20 @@ def makeDF(input):
     df = json_normalize(myJson, sep='_')
     return df
 
-def write_to_static(df):
+def write_to_static(input):
+    df = makeDF(input)
     df_static = df[['number', 'contract_name', 'name', 'address', 
                     'position_lat', 'position_lng', 'banking', 'bonus']]
     df_static.to_sql('static', engine, if_exists='replace', index=False)
     
-def write_to_dynamic(df):
+def write_to_dynamic(input):
+    df = makeDF(input)
     df_dynamic = df[['number', 'status', 'bike_stands', 'available_bike_stands', 
                      'available_bikes', 'last_update']]   
     df_dynamic.to_sql('dynamic', engine, if_exists='append', index=False)
 
-def write_to_weather(df):
+def write_to_weather(input):
+    df = makeDF(input)
     df2 = json_normalize(df['weather'][0])
     df2 = df2[['main', 'description']]
     df1 = df[['main_temp', 'main_pressure', 'wind_speed', 'visibility', 'sys_sunrise', 'sys_sunset', 'dt']]
@@ -121,6 +124,11 @@ def write_to_weather(df):
                                             'sys_sunrise': 'sunrise', 'sys_sunset': 'sunset', 'dt': 'time'})
     df_weather.to_sql('weather', engine, if_exists='append', index=False)
     
-
-    
+def dataDir_to_RDB():
+    for file in glob.glob("./data/*"):
+        write_to_static(openFile(file))
+        
+def weatherDir_to_RDB():
+    for file in glob.glob("./weatherdata/*"):
+        write_to_weather(openFile(file))
 

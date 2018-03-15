@@ -20,7 +20,7 @@ def main():
             now = datetime.datetime.now()
             response = requests.get(APIREQUEST, params={ "id": CITYID, "appid": APIID})
             print(response, now)
-            write_to_weather(makeDF(response.text))               
+            write_to_weather(response.text)           
             time.sleep(10*60)
         except:
             print(traceback.format_exc())

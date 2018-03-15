@@ -20,7 +20,7 @@ def main():
             now = datetime.datetime.now()
             response = requests.get(STATIONS, params={"apiKey": APIKEY, "contract": CONTRACT})
             print(response, now)
-            write_to_dynamic(makeDF(response.text))               
+            write_to_dynamic(response.text)              
             time.sleep(5*60)
             count += 1
             # Once a day, update static table
