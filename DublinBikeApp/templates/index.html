@@ -1,0 +1,96 @@
+//having a problem with the rest api url. 
+
+<!DOCTYPE html>
+<html>
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>FORECASTER</title>
+        <meta name="Dublin Bike Planner">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style2.css') }}">
+
+</head>
+
+<body>
+
+        <div id="firstDiv" STYLE="z-index: 1;"><img src = "/static/dublinBike.jpg" alt = "image of dublin bike" height="50"></a></div>
+
+        <header><a class='one' href = 'FORECASTER2.html'><br><br><br><strong>DUBLIN BIKE PLANNER</strong></a></header>
+
+        <header id='two'><h1>Click on a station to see more information</h1></header>
+
+
+
+
+<script type="text/javascript">
+		function initialise() {
+			// create object literal to store map properties
+			var myOptions = {
+				zoom: 8 // set zoom level
+				, mapTypeId: google.maps.MapTypeId.HYBRID // apply tile (options include ROADMAP, SATELLITE, HYBRID and TERRAIN)
+			};
+			
+			// create map object and apply properties
+			var map = new google.maps.Map( document.getElementById( "map_canvas" ), myOptions );
+			
+			// create map bounds object
+			var bounds = new google.maps.LatLngBounds();
+			// create array containing locations
+			var locations = [
+				[ 'Bondi Beach', -33.890542, 151.274856 ]
+				, [ 'Coogee Beach', -33.923036, 151.259052 ]
+				, [ 'Cronulla Beach', -34.028249, 151.157507 ]
+				, [ 'Manly Beach', -33.80010128657071, 151.28747820854187 ]
+				, [ 'Maroubra Beach', -33.950198, 151.259302 ]
+			];
+			// loop through locations and add to map
+			for ( var i = 0; i < locations.length; i++ )
+			{
+				// get current location
+				var location = locations[ i ];
+				
+				// create map position
+				var position = new google.maps.LatLng( location[ 1 ], location[ 2 ] );
+				
+				// add position to bounds
+				bounds.extend( position );
+				
+				// create marker (https://developers.google.com/maps/documentation/javascript/reference#MarkerOptions)
+				var marker = new google.maps.Marker({
+					animation: google.maps.Animation.DROP
+					, icon: "http://www.google.com/intl/en_us/mapfiles/ms/micons/blue-dot.png"
+					, map: map
+					, position: position
+					, title: location[ 0 ]
+				});
+				
+				// create info window and add to marker (https://developers.google.com/maps/documentation/javascript/reference#InfoWindowOptions)
+				google.maps.event.addListener( marker, 'click', ( 
+					function( marker, i ) {
+						return function() {
+							var infowindow = new google.maps.InfoWindow();
+							infowindow.setContent( locations[ i ][ 0 ] );
+							infowindow.open( map, marker );
+						}
+					}
+				)( marker, i ) );
+			};
+			// fit map to bounds
+			map.fitBounds( bounds );
+		}
+		// load map after page has finished loading
+		function loadScript() {
+			var script = document.createElement( "script" );
+			script.type = "text/javascript";
+			script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA&callback=initialise"; // initialize method called using callback parameter
+			document.body.appendChild( script );
+		}
+		window.onload = loadScript;
+</script>
+<script type=text/javascript src="{{ url_for('static', filename='main.js') }}"></script>
+
+
+</body>
+</html>
+
+
