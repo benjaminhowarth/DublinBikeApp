@@ -2,6 +2,7 @@ import requests
 import traceback
 import datetime
 import time
+from dbWriter import makeDF, write_to_static, write_to_dynamic
 APIKEY="6ea4678acfb75dfd8022fbb67f5170e2ba8bfcdc"
 CONTRACT="Dublin"
 STATIONS="https://api.jcdecaux.com/vls/v1/stations"
@@ -11,18 +12,21 @@ STATIONS="https://api.jcdecaux.com/vls/v1/stations"
 def write_to_file(text, now):
     with open("data/bikes_{}".format(now).replace(" ", "_"), "w") as f:
         f.write(text)
-        
-def write_to_db(text):
-    pass
 
 def main():
+    count = 0
     while True:
         try:
             now = datetime.datetime.now()
-            r = requests.get(STATIONS, params={"apiKey": APIKEY, "contract": CONTRACT})
-            print(r, now)
-            write_to_file(r.text, now)                
+            response = requests.get(STATIONS, params={"apiKey": APIKEY, "contract": CONTRACT})
+            print(response, now)
+            write_to_dynamic(response.text)              
             time.sleep(5*60)
+            count += 1
+            # Once a day, update static table
+            if count >= 288:
+                write_to_static(makeDF(response.text))
+                count = 0
         except:
             print(traceback.format_exc())
     return
