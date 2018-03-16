@@ -5,7 +5,7 @@ from . import *
 
 @app.route('/')
 def index():
-    return render_template('thursday_copy_index')
+    return render_template('index.html')
     return "Welcome to Dublin Bike Planner"
 def displayTest(): 
 	return "Test passed: " + main()
