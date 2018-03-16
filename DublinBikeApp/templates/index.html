@@ -2,87 +2,27 @@
 <html>
 <head>
 	<meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
-        <title>FORECASTER</title>
-        <meta name="Dublin Bike Planner">
-        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    <title>FORECASTER</title>
+    <meta name="Dublin Bike Planner">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+	<script type=text/javascript src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
-	
-<body>
-	
-	<div id="firstDiv" STYLE="z-index: 1;"><img src = "/static/dublinBike.jpg" alt = "image of dublin bike" height="50"></a></div>
-
-	<header><a class='one' href = 'FORECASTER2.html'><br><br><br><strong>DUBLIN BIKE PLANNER</strong></a></header>
-	
-	<header id='two'><h1>Click on a station to see more information</h1></header>
-
-
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA">
-
-	var map;
-	function initMap() {
-		var DublinPosition = {lat: 53.3484906, lng: -6.2551201};
-		var DublinPosition2 = {lat: 53.3484906, lng: -7.2551201};
-		map = new google.maps.Map(document.getElementById('map'), { zoom:10,
-	  		center: DublinPosition
-			});
-		var marker = new google.maps.Marker({
-	  		position: DublinPosition,
-	  		map: map
-			});
-		var marker2 = new google.maps.Marker({
-          		position: DublinPosition2,
-          		map: map
- 			}); 
-		var marker = null;
-	}
-
-initMap();
-
-	var marker = null;
-        function placeMarker(location, title){
-
-                marker = new google.maps.Marker({
-                        position: location,
-                        animation: google.maps.Animation.BOUNCE,
-                        title: title,
-                        draggable:true
-                        });
-
-                marker.setMap(map);
-
-                }
-
-
-        var lagLang = [];
-        var asd = { lat: -25.403, lng: 131.044 };
-        lagLang.push(asd)
-
-        var asd = { lat: -25.403, lng: 135.044 };
-        lagLang.push(asd)
-
-        var asd = { lat: -25.403, lng: 139.044 };
-        lagLang.push(asd)
-
-        var asd = { lat: -25.403, lng: 150.044 };
-        lagLang.push(asd)
-
-        var asd = { lat: -25.403, lng: 131.044 };
-        lagLang.push(asd)
-
-        for (var i=0; i<=lagLang.length; i++) {
-                placeMarker(lagLang[i], "Marker Number " + i + 1)
-        }
-
-	
-
-</script>
-	
-	<div id='map'></div>
-		
-<script type=text/javascript src="{{ url_for('static', filename='main.js') }}"></script>
-	
+<body>	
+	<div id="firstDiv" STYLE="z-index: 1;">
+		<img src = "/static/dublinBike.jpg" alt = "image of dublin bike" height="50">
+	</div>
+	<header>
+		<br><br><br>
+		<strong>DUBLIN BIKE PLANNER</strong>
+	</header>
+	<header id='two'>
+		<h1>Click on a station to see more information</h1>
+	</header>
+	<script async defer 
+		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA&callback=initMap">
+	</script>
+	<div id='map'></div>	
 </body>
 </html>
 
