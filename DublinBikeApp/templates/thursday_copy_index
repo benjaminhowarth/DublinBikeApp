@@ -16,12 +16,9 @@
 	<header><a class='one' href = 'FORECASTER2.html'><br><br><br><strong>DUBLIN BIKE PLANNER</strong></a></header>
 	
 	<header id='two'><h1>Click on a station to see more information</h1></header>
-	
-</script>
 
 <script>
 
-	var marker = null;
 	var map;
 	function initMap() {
 		var DublinPosition = {lat: 53.3484906, lng: -6.2551201};
@@ -33,14 +30,15 @@
 	  		position: DublinPosition,
 	  		map: map
 			});
-		var marker = new google.maps.Marker({
+		var marker2 = new google.maps.Marker({
           		position: DublinPosition2,
           		map: map
  			}); 
 		var marker = null;
 	}
-
-
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA&callback=initMap">
+<script>
 	var marker = null;
         function placeMarker(location, title){
 
@@ -79,8 +77,6 @@
 
 	
 </script>
-
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA&callback=initMap">
 	
 	<div id='map'></div>
 		
