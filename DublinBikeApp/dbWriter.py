@@ -88,6 +88,19 @@ def dropTable(tableName):
         engine.execute(sql)
     except Exception as e:
         print(e)
+        
+def removeDuplicateRows(tableName):
+    sql = """
+    SELECT DISTINCT * INTO temp FROM {}
+    DELETE FROM {}
+    INSERT INTO {}                
+    SELECT * FROM temp DROP TABLE 
+    
+    SELECT * FROM {}
+    """.format(tableName)
+    print(sql)
+    
+removeDuplicateRows(static)
 
 def openFile(file):
     if os.path.isfile(file) == True:

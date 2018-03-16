@@ -13,5 +13,3 @@ def displayTest():
 @app.route('/test')
 def test():
 	return "<h1>Test is good</h1>"
-
-	
