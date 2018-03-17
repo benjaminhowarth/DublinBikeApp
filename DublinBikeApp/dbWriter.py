@@ -91,16 +91,16 @@ def dropTable(tableName):
         
 def removeDuplicateRows(tableName):
     sql = """
-    SELECT DISTINCT * INTO temp FROM {}
-    DELETE FROM {}
-    INSERT INTO {}                
+    SELECT DISTINCT * INTO temp FROM {0}
+    DELETE FROM {0}
+    INSERT INTO {0}                
     SELECT * FROM temp DROP TABLE 
-    
-    SELECT * FROM {}
+    SELECT * FROM {0}
     """.format(tableName)
     print(sql)
+    # Not sure if working yet.
     
-removeDuplicateRows(static)
+removeDuplicateRows('weather')
 
 def openFile(file):
     if os.path.isfile(file) == True:
