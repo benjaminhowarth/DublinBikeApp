@@ -27,6 +27,8 @@ function initMap() {
 		}
 	}
 	
+
+	
 	var markers = [
 		{
 			coords:{lat: 53.3484906, lng: -6.2551201},

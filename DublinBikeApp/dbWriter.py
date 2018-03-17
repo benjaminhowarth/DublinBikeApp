@@ -1,5 +1,5 @@
 import sqlalchemy
-from sqlalchemy import *
+from sqlalchemy import create_engine
 import traceback
 import glob
 import os
@@ -99,8 +99,6 @@ def removeDuplicateRows(tableName):
     """.format(tableName)
     print(sql)
     # Not sure if working yet.
-    
-removeDuplicateRows('weather')
 
 def openFile(file):
     if os.path.isfile(file) == True:

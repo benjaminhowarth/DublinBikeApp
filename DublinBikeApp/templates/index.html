@@ -22,7 +22,12 @@
 	<script async defer 
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA&callback=initMap">
 	</script>
-	<div id='map'></div>	
+	<div id='map'></div>
+	<div>
+		{% for station in stations %}
+		{{ station.name }}
+		{% endfor %}
+	</tdiv>
 </body>
 </html>
 
