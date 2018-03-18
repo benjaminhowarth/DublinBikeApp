@@ -5,7 +5,7 @@ function initMap() {
     
     // Create Map
     var map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 12,
+      zoom: 14,
       center: dublin
     });
 	
@@ -26,23 +26,9 @@ function initMap() {
 			});
 		}
 	}
-	
 
-	
-	var markers = [
-		{
-			coords:{lat: 53.3484906, lng: -6.2551201},
-			content:'<h3>Station 1</h3>'
-		},
-		{
-			coords:{lat: 53.3234324, lng: -6.2234234},
-			content:'<h3>Station 2</h3>'
-		}
-	];
-	
 	for(var i = 0; i < markers.length; i++){
 		addMarker(markers[i]);
 	};
 }
-
 

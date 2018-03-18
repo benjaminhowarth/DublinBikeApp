@@ -8,26 +8,27 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 	<script type=text/javascript src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
-<body>	
-	<div id="firstDiv" STYLE="z-index: 1;">
-		<img src = "/static/dublinBike.jpg" alt = "image of dublin bike" height="50">
-	</div>
-	<header>
-		<br><br><br>
-		<strong>DUBLIN BIKE PLANNER</strong>
-	</header>
-	<header id='two'>
-		<h1>Click on a station to see more information</h1>
-	</header>
+<body>
+	<aside>
+		<header>
+			DUBLIN BIKE PLANNER
+		</header>
+		<article></article>
+	</aside>
+	<div id='map'></div>
+	<script>
+	var markers = [
+		{% for station in stations %}
+		{
+		coords: {lat:{{station.position_lat}}, lng:{{station.position_lng}} {{ '}' }},
+		content: '<h3>Station {{station.number}}</h3>{{station.address}}'
+		},
+		{% endfor %}
+		];
+	</script>
 	<script async defer 
 		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA&callback=initMap">
 	</script>
-	<div id='map'></div>
-	<div>
-		{% for station in stations %}
-		{{ station.name }}
-		{% endfor %}
-	</tdiv>
 </body>
 </html>
 
