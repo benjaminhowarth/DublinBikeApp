@@ -1,10 +1,11 @@
 var map;
 var market = null;
-
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA";
 function initMap() {
 	var DublinPosition = {lat: 53.3484906, lng: -6.2551201};
 	map = new google.maps.Map(document.getElementById('map'), {zoom:10, center: DublinPosition});
 	var marker = new google.maps.Marker({position: DublinPosition, map: map});
+	var marker2 = new google.maps.Marker({position: {lat: 55.3484906, lng: -8.2551201}, map: map});
 }
 
 function placeMarker(location, title){
@@ -14,7 +15,6 @@ function placeMarker(location, title){
 		title: title,draggable:true
 		});
 	marker.setMap(map);
-	asdfasdfasdf
 }
 
 var lagLang = [
