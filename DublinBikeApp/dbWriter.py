@@ -1,5 +1,5 @@
 import sqlalchemy
-from sqlalchemy import *
+from sqlalchemy import create_engine
 import traceback
 import glob
 import os
@@ -91,16 +91,14 @@ def dropTable(tableName):
         
 def removeDuplicateRows(tableName):
     sql = """
-    SELECT DISTINCT * INTO temp FROM {}
-    DELETE FROM {}
-    INSERT INTO {}                
+    SELECT DISTINCT * INTO temp FROM {0}
+    DELETE FROM {0}
+    INSERT INTO {0}                
     SELECT * FROM temp DROP TABLE 
-    
-    SELECT * FROM {}
+    SELECT * FROM {0}
     """.format(tableName)
     print(sql)
-    
-removeDuplicateRows(static)
+    # Not sure if working yet.
 
 def openFile(file):
     if os.path.isfile(file) == True:

@@ -1,0 +1,63 @@
+<<<<<<< HEAD
+var map;
+var market = null;
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA";
+function initMap() {
+	var DublinPosition = {lat: 53.3484906, lng: -6.2551201};
+	map = new google.maps.Map(document.getElementById('map'), {zoom:10, center: DublinPosition});
+	var marker = new google.maps.Marker({position: DublinPosition, map: map});
+	var marker2 = new google.maps.Marker({position: {lat: 55.3484906, lng: -8.2551201}, map: map});
+}
+
+function placeMarker(location, title){
+	marker = new google.maps.Marker({
+		position: location, 
+		animation: google.maps.Animation.BOUNCE,
+		title: title,draggable:true
+		});
+	marker.setMap(map);
+}
+
+var lagLang = [
+	{lat: -25.403, lng: 131.044 },
+	{lat: -25.403, lng: 135.044 },
+	{lat: -25.403, lng: 139.044 },
+	{lat: -25.403, lng: 150.044 },
+	{lat: -25.403, lng: 131.044 }
+	];
+=======
+// Code from Traversy Media - Google Maps JavaScript API Tutorial
+// https://www.youtube.com/watch?v=Zxf1mnP5zcw
+function initMap() {
+    var dublin = {lat: 53.3484906, lng: -6.2551201};
+    
+    // Create Map
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 14,
+      center: dublin
+    });
+	
+	function addMarker(args){
+		var marker = new google.maps.Marker({
+			position: args.coords,
+			map: map
+		});
+		
+		// Check for content
+		if(args.content){
+			var infoWindow = new google.maps.InfoWindow({
+				content: args.content
+			});
+			
+			marker.addListener('click', function(){
+				infoWindow.open(map, marker);
+			});
+		}
+	}
+>>>>>>> 0fae855adc32f0fb6a3b219b6a42d475fdef1ad4
+
+	for(var i = 0; i < markers.length; i++){
+		addMarker(markers[i]);
+	};
+}
+
