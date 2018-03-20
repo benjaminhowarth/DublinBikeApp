@@ -17,18 +17,19 @@ function initMap() {
 		
 		// Check for content
 		if(args.content){
-			var infoWindow = new google.maps.InfoWindow({
-				content: args.content
-			});
-			
 			marker.addListener('click', function(){
+				if(infoWindow) infoWindow.close();
+				
+				infoWindow = new google.maps.InfoWindow({
+					content: args.content
+				});
+				
 				infoWindow.open(map, marker);
 			});
 		}
 	}
-	
+	var infoWindow;
 	for(var i = 0; i < markers.length; i++){
 		addMarker(markers[i]);
 	};
 }
-
