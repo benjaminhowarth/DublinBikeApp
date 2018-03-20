@@ -29,7 +29,7 @@ class Static(db.Model):
 class Dynamic(db.Model):
     __tablename__ = 'dynamic'
     number = db.Column('number', db.Integer)
-    status = db.Column('static', db.Unicode)
+    status = db.Column('status', db.Unicode)
     bike_stands = db.Column('bike_stands', db.Integer)
     available_bike_stands = db.Column('available_bikes_stands', db.Integer)
     available_bikes = db.Column('available_bikes', db.Integer)
