@@ -25,6 +25,15 @@ class Static(db.Model):
     position_lng = db.Column('position_lng', db.Integer)
     banking = db.Column('banking', db.Integer)
     bonus = db.Column('bonus', db.Integer)
+    
+class Dynamic(db.Model):
+    __tablename__ = 'dynamic'
+    number = db.Column('number', db.Integer)
+    status = db.Column('static', db.Unicode)
+    bike_stands = db.Column('bike_stands', db.Integer)
+    available_bike_stands = db.Column('available_bikes_stands', db.Integer)
+    available_bikes = db.Column('available_bikes', db.Integer)
+    last_update = db.Column('last_update', db.Integer, primary_key=True)
 
 @app.route('/')
 def index():
@@ -33,5 +42,4 @@ def index():
 
 
 if __name__ == "__main__":
-    # When finished, remove debug!
     app.run(host='0.0.0.0', port=5000)

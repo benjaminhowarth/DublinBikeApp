@@ -26,8 +26,7 @@ function initMap() {
 			});
 		}
 	}
->>>>>>> 0fae855adc32f0fb6a3b219b6a42d475fdef1ad4
-
+	
 	for(var i = 0; i < markers.length; i++){
 		addMarker(markers[i]);
 	};
