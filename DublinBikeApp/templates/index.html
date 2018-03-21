@@ -22,7 +22,7 @@
 		{% for station in stations %}
 		{
 		coords: {lat:{{station.position_lat}}, lng:{{station.position_lng}} {{ '}' }},
-		content: '<h3>Station {{station.number}}</h3>{{station.address}}'
+		content: '<h4>{{station.address}}</h4>'
 		},
 		{% endfor %}
 		];
