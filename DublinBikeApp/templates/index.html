@@ -12,14 +12,21 @@
 
 	<div id='floating-panel'><h2>DUBLIN BIKE PLANNER</h2></div>
 	<div id='map'></div>
+<<<<<<< HEAD
 		
+=======
+>>>>>>> branch 'master' of https://github.com/benjaminhowarth/DublinBikeApp.git
 	<script>
 	// Pass marker values from flask app into template.
 	var markers = [
 		{% for station in stations %}
 		{
 		coords: {lat:{{station.Static.position_lat}}, lng:{{station.Static.position_lng}} {{ '}' }},
+<<<<<<< HEAD
 		content: '<h3>{{station.Static.address}}</h3><h4>Bike Stands = {{station.Dynamic.bike_stands}}</h4><h4>Available Bikes = {{station.Dynamic.available_bikes}}</h4><h4>Available Bike Stands = {{station.Dynamic.available_bike_stands}}</h4>'
+=======
+		content: '<h3>Station {{station.Static.number}}</h3>{{station.Static.address}}<h3>Bike Stands = {{station.Dynamic.bike_stands}}</h3><h3>Available Bikes = {{station.Dynamic.available_bikes}}</h3><h3>Available Bike Stands = {{station.Dynamic.available_bike_stands}}</h3>'
+>>>>>>> branch 'master' of https://github.com/benjaminhowarth/DublinBikeApp.git
 		
 		},
 		{% endfor %}
