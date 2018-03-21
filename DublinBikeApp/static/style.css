@@ -25,6 +25,11 @@ header {
 	padding: 5px;
 }
 
+h3 {
+	color: red;
+}
+
+
 /* Main text of info column */
 article {
 	flex-grow: 3;
