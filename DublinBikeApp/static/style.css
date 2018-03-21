@@ -69,7 +69,7 @@ article {
 	position: absolute;
 	width: 100px;
 	left: 6px;
-  	top: 5%;
+  	top: 23px;
   	margin:0 auto;
   	text-align:center;
   	color: black;
@@ -82,7 +82,10 @@ article {
   	width: 100% ;
   	margin:0 auto;
   	text-align:center;
+  	background-color: white;
   	color: black;
+  	outline: none;
+  	border-radius: 12px;
   	z-index: 1;
   	font-family: 'Roboto';
 }
@@ -108,4 +111,8 @@ article {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.gm-style-iw {
+	
 }

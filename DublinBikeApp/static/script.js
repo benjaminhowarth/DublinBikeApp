@@ -6,7 +6,8 @@ function initMap() {
     // Create Map
     var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
-      center: dublin
+      center: dublin,
+      mapTypeControl: false
     });
 	
 	function addMarker(args){
