@@ -10,8 +10,17 @@
 </head>
 <body>
 
-	<div id='floating-panel'><h2>DUBLIN BIKE PLANNER</h2></div>
+	<div id='floating-panel'><h2>dublinbikes PLANNER</h2></div>
+	<div id='modalButtonDiv'>
+		<button id="myBtn">Info</button>
+	</div>
 	<div id='map'></div>
+	<div id="myModal" class="modal">
+		<div class="modal-content">
+		    <span class="close">&times;</span>
+		    <p>Info on how to use the site.</p>
+		</div>
+	</div>
 
 	<script>
 	// Pass marker values from flask app into template.
