@@ -10,11 +10,11 @@ body {
 }
 
 /* Info column on Left */
-aside {
+/* aside {
 	flex-grow: 2;
 	display: flex;
 	flex-direction: column;
-}
+} */
 
 /* Header of info column */
 header {
@@ -29,6 +29,16 @@ h3 {
 	color: red;
 }
 
+
+#floating-panel {
+  position: absolute;
+  width: 100% ;
+  margin:0 auto;
+  text-align:center;
+  color: black;
+  z-index: 1;
+  font-family: 'Roboto';
+}
 
 /* Main text of info column */
 article {

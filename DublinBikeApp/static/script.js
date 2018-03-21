@@ -26,10 +26,15 @@ function initMap() {
 				
 				infoWindow.open(map, marker);
 			});
+			
 		}
 	}
 	var infoWindow;
 	for(var i = 0; i < markers.length; i++){
 		addMarker(markers[i]);
 	};
+
+	map.addListener('click', function() {
+		if(infoWindow ) infoWindow.close();
+	    });
 }

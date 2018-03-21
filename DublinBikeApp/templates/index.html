@@ -9,14 +9,10 @@
 	<script type=text/javascript src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
-	<aside>
-		<header>
-			DUBLIN BIKE PLANNER
 
-		</header>
-		<article></article>
-	</aside>
+	<div id='floating-panel'><h2>DUBLIN BIKE PLANNER</h2></div>
 	<div id='map'></div>
+		
 	<script>
 	// Pass marker values from flask app into template.
 	var markers = [
