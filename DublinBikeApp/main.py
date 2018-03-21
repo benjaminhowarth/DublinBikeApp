@@ -4,12 +4,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.sql.schema import ForeignKey, ForeignKeyConstraint
 from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
 from sqlalchemy import and_
 app = Flask(__name__)
 
-Base = declarative_base()
 # Configure MySQL
 URI="dublinbikedb.cm66ft6swiuh.us-west-2.rds.amazonaws.com"
 PORT="3306"

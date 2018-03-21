@@ -17,23 +17,13 @@
 		<article></article>
 	</aside>
 	<div id='map'></div>
-	<script type="text/javascript">
-	{# your_template.jinja #}
-<table>
-{% for row in dynamic %}
-    <tr>
-        <td>{{ row }}</td>
-    </tr>
-{% endfor %}
-</table>
-</script>
 	<script>
 	// Pass marker values from flask app into template.
 	var markers = [
 		{% for station in stations %}
 		{
 		coords: {lat:{{station.Static.position_lat}}, lng:{{station.Static.position_lng}} {{ '}' }},
-		content: '<h3>Station {{station.Static.number}}</h3>{{station.Static.address}}<h3>Available Bikes = {{station.Dynamic.available_bikes}}</h3><h3>Available Bike Stands = {{station.Dynamic.available_bike_stands}}</h3>'
+		content: '<h3>Station {{station.Static.number}}</h3>{{station.Static.address}}<h3>Bike Stands = {{station.Dynamic.bike_stands}}</h3><h3>Available Bikes = {{station.Dynamic.available_bikes}}</h3><h3>Available Bike Stands = {{station.Dynamic.available_bike_stands}}</h3>'
 		
 		},
 		{% endfor %}
