@@ -63,6 +63,22 @@ def createDynamicTable():
     except Exception as e:
         print(e)
         
+def createLatestDynamicTable():
+    sql = """
+    CREATE TABLE IF NOT EXISTS latestDynamic (
+    number INTEGER,
+    status VARCHAR(256),
+    bike_stands INTEGER,
+    available_bike_stands INTEGER,
+    available_bikes INTEGER,
+    last_update BIGINT
+    )
+    """
+    try:
+        engine.execute(sql)
+    except Exception as e:
+        print(e)
+        
 def createWeatherTable():
     sql = """
     CREATE TABLE IF NOT EXISTS weather (
@@ -124,6 +140,12 @@ def write_to_dynamic(input):
     df_dynamic = df[['number', 'status', 'bike_stands', 'available_bike_stands', 
                      'available_bikes', 'last_update']]   
     df_dynamic.to_sql('dynamic', engine, if_exists='append', index=False)
+    
+def write_to_latestDynamic(input):
+    df = makeDF(input)
+    df_latestDynamic = df[['number', 'status', 'bike_stands', 'available_bike_stands', 
+                     'available_bikes', 'last_update']] 
+    df_latestDynamic.to_sql('latestDynamic', engine, if_exists='replace', index=False)
 
 def write_to_weather(input):
     df = makeDF(input)

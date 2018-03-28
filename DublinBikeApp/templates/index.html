@@ -28,7 +28,7 @@
 		{% for station in stations %}
 		{
 		coords: {lat:{{station.Static.position_lat}}, lng:{{station.Static.position_lng}} {{ '}' }},
-		content: '<h3>{{station.Static.address}}</h3><h4>Bike Stands = {{station.Dynamic.bike_stands}}</h4><h4>Available Bikes = {{station.Dynamic.available_bikes}}</h4><h4>Available Bike Stands = {{station.Dynamic.available_bike_stands}}</h4>'
+		content: '<h3>{{station.Static.address}}</h3><h4>Bike Stands = {{station.LatestDynamic.bike_stands}}</h4><h4>Available Bikes = {{station.LatestDynamic.available_bikes}}</h4><h4>Available Bike Stands = {{station.LatestDynamic.available_bike_stands}}</h4>'
 		},
 		{% endfor %}
 		];

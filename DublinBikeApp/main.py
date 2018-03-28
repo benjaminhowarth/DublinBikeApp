@@ -47,12 +47,23 @@ class Dynamic(db.Model):
     available_bikes = db.Column('available_bikes', db.Integer)
     last_update = db.Column('last_update', db.Integer, primary_key=True)
 
+class LatestDynamic(db.Model):
+    __tablename__ = 'latestDynamic'
+    number = db.Column('number', db.Integer, ForeignKey('static.number'))
+    static = relationship("Static")
+    status = db.Column('status', db.Unicode)
+    bike_stands = db.Column('bike_stands', db.Integer)
+    available_bike_stands = db.Column('available_bike_stands', db.Integer)
+    available_bikes = db.Column('available_bikes', db.Integer)
+    last_update = db.Column('last_update', db.Integer, primary_key=True)
+    
+     
 @app.route('/')
 def index():
-    stations= (session.query(Static, Dynamic)
-        .join(Dynamic, and_(Static.number == Dynamic.number))
-        .order_by(Dynamic.last_update.desc())
-        .limit(100)
+    stations= (session.query(Static, LatestDynamic)
+        .join(LatestDynamic, and_(Static.number == LatestDynamic.number))
+        .order_by(LatestDynamic.last_update.desc())
+#        .limit(100)
         ).all()
 
     return render_template('index.html', stations=stations)
