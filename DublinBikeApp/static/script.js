@@ -30,6 +30,7 @@ function initMap() {
 			
 		}
 	}
+	
 	var infoWindow;
 	for(var i = 0; i < markers.length; i++){
 		addMarker(markers[i]);
@@ -64,6 +65,4 @@ function initMap() {
 	        modal.style.display = "none";
 	    }
 	}
-	
-	
 }

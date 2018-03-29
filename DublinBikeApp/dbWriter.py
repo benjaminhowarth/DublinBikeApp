@@ -111,7 +111,7 @@ def openFile(file):
 def makeDF(input):
     myJson = json.loads(input)
     df = json_normalize(myJson, sep='_')
-    return df
+    return dfnds 
 
 def write_to_static(input):
     df = makeDF(input)
