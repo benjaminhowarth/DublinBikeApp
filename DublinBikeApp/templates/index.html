@@ -5,23 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
     <title>FORECASTER</title>
     <meta name="Dublin Bike Planner">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 	<script type=text/javascript src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
-
-	<div id='floating-panel'><h2>dublinbikes PLANNER</h2></div>
-	<div id='modalButtonDiv'>
-		<button id="myBtn">Info</button>
-	</div>
+	<!--	<header>DUBLIN BIKE PLANNER</header> -->
+	<button id="toggleOpen">&gt;&gt;&gt;</button>
+	<aside>		
+		<button id="toggleClose">&lt;&lt;&lt;</button>
+ 		<article></article>
+ 	</aside>
 	<div id='map'></div>
-	<div id="myModal" class="modal">
-		<div class="modal-content">
-		    <span class="close">&times;</span>
-		    <p>Info on how to use the site.</p>
-		</div>
-	</div>
-
 	<script>
 	// Pass marker values from flask app into template.
 	var markers = [

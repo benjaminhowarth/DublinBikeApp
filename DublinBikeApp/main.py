@@ -56,8 +56,7 @@ class LatestDynamic(db.Model):
     available_bike_stands = db.Column('available_bike_stands', db.Integer)
     available_bikes = db.Column('available_bikes', db.Integer)
     last_update = db.Column('last_update', db.Integer, primary_key=True)
-    
-     
+       
 @app.route('/')
 def index():
     stations= (session.query(Static, LatestDynamic)

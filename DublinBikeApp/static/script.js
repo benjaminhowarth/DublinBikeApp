@@ -4,7 +4,7 @@ function initMap() {
     var dublin = {lat: 53.3484906, lng: -6.2551201};
     
     // Create Map
-    var map = new google.maps.Map(document.getElementById('map'), {
+	var map = new google.maps.Map(document.getElementById('map'), {
       zoom: 14,
       center: dublin,
       mapTypeControl: false
@@ -19,7 +19,8 @@ function initMap() {
 		// Check for content
 		if(args.content){
 			marker.addListener('click', function(){
-				if(infoWindow) infoWindow.close();
+				if(infoWindow) 
+					infoWindow.close();
 				
 				infoWindow = new google.maps.InfoWindow({
 					content: args.content
@@ -37,32 +38,52 @@ function initMap() {
 	};
 
 	map.addListener('click', function() {
-		if(infoWindow ) infoWindow.close();
-	    });
-	
-	// Get the modal
-	var modal = document.getElementById('myModal');
-
-	// Get the button that opens the modal
-	var btn = document.getElementById("myBtn");
-
-	// Get the <span> element that closes the modal
-	var span = document.getElementsByClassName("close")[0];
-
-	// When the user clicks on the button, open the modal 
-	btn.onclick = function() {
-	    modal.style.display = "block";
-	}
-
-	// When the user clicks on <span> (x), close the modal
-	span.onclick = function() {
-	    modal.style.display = "none";
-	}
-
-	// When the user clicks anywhere outside of the modal, close it
-	window.onclick = function(event) {
-	    if (event.target == modal) {
-	        modal.style.display = "none";
-	    }
-	}
+		if(infoWindow ) 
+			infoWindow.close();
+	});
 }
+
+$(document).ready(function(){
+	$('#toggleOpen').click(function() {
+		$('aside').addClass('open');
+		$('#toggleOpen').css("display", "none");
+	});
+
+	$('#toggleClose').click(function() {
+		$('aside').removeClass('open');
+		window.setTimeout(function(){    
+			$('#toggleOpen').css("display", "flex");
+		}, 400);
+	});
+});
+
+
+
+
+
+//// Get the modal
+//var modal = document.getElementById('myModal');
+//
+//// Get the button that opens the modal
+//var btn = document.getElementById("myBtn");
+//
+//// Get the <span> element that closes the modal
+//var span = document.getElementsByClassName("close")[0];
+//
+//// When the user clicks on the button, open the modal 
+//btn.onclick = function() {
+//	modal.style.display = "block";
+//}
+//
+//// When the user clicks on <span> (x), close the modal
+//span.onclick = function() {
+//	modal.style.display = "none";
+//}
+//
+//// When the user clicks anywhere outside of the modal, close it
+//window.onclick = function(event) {
+//	if (event.target == modal) {
+//		modal.style.display = "none";
+//	}
+//}
+//
