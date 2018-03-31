@@ -5,11 +5,44 @@ html, body {
 
 body {
 	display: flex;
+	flex-direction: column;
+}
+
+#mapHeader {
+	text-align: center;
+	font-weight: bold;
+	font-family: 'Roboto';
+	display: block;
+	align-self: center;
+	position: absolute;
+	z-index: 1;
+	padding-top: 5px;
+	word-spacing: 10px;
+	font-size: 35px;
+}
+
+main {
+    height: 100%;
+	margin: 0;
+	display: flex;
 	flex-direction: row;
 	align-items: stretch;
 }
 
-#toggleOpen {
+#mapContainer {
+	order: 2;
+	display: flex;
+	flex-direction: row;
+	flex-grow: 5;
+}
+
+#map {
+	width: 100%;
+	background-color: lightgrey;
+}
+
+#toggle {
+	align-self: flex-start;
 	height: 40px;
 	width: 40px;
 	text-align: center;
@@ -17,17 +50,13 @@ body {
 	z-index: 1;
 }
 
-#toggleClose {
-	height: 40px;
-	width: 40px;
-	text-align: center;
-	position: absolute;
-	align-self: flex-end;
-}
-
 /* Side bar */
 aside {
+	order: 1;
+	flex-basis: 0;  /* Flex space should distribute either side of content */
 	flex-grow: 0;
+	min-width: 30%;
+	margin-left: -30%;
 	transition: all 0.5s;
 	display: flex;
 	flex-direction: column;
@@ -35,29 +64,27 @@ aside {
 
 .open {
 	flex-grow: 2;
+	margin-left: 0px;
 }
 
-/* Header of side bar */
-header {
-	position: absolute;
-	margin:0 auto;
+#sidebarHeader {
 	text-align: center;
-	color: red;
 	font-weight: bold;
-	font-size: 30px;
-	padding: 5px;
-	z-index: 1;
 	font-family: 'Roboto';
+	padding: 5px;
+	font-size: 30px;
 }
 
-/* Main text of info column */
+/* Main content of info column */
 article {
+	display: flex;
+	flex-direction: column;
 	flex-grow: 3;
 }
 
-#map {
-	flex-grow: 5;
-    background-color: lightgrey;
+img {
+	align-self: flex-end;
+	width: 100%;
 }
 
 

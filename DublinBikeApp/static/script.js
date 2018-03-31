@@ -44,19 +44,21 @@ function initMap() {
 }
 
 $(document).ready(function(){
-	$('#toggleOpen').click(function() {
-		$('aside').addClass('open');
-		$('#toggleOpen').css("display", "none");
-	});
-
-	$('#toggleClose').click(function() {
-		$('aside').removeClass('open');
-		window.setTimeout(function(){    
-			$('#toggleOpen').css("display", "flex");
-		}, 400);
+	$('#toggle').click(function() {
+		var clicks = $(this).data('clicks');
+		if (!clicks) {
+			$(this).html("&lt;&lt;&lt;")
+			$('aside').addClass('open');
+			$('#toggleOpen').css("display", "none");
+			$('#mapHeader').fadeOut()
+		} else {
+			$(this).html("&gt;&gt;&gt;")
+			$('aside').removeClass('open');
+			$('#mapHeader').fadeIn()
+		}
+		$(this).data("clicks", !clicks);
 	});
 });
-
 
 
 
