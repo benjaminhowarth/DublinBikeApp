@@ -154,3 +154,10 @@ img {
     text-decoration: none;
     cursor: pointer;
 }
+
+#weather{
+	text-align: center;
+	font-family: 'Roboto';
+	padding: 5px;
+	font-size: 15px;
+}

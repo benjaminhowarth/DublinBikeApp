@@ -56,7 +56,9 @@ class LatestDynamic(db.Model):
     available_bike_stands = db.Column('available_bike_stands', db.Integer)
     available_bikes = db.Column('available_bikes', db.Integer)
     last_update = db.Column('last_update', db.Integer, primary_key=True)
-       
+#class Forecast(db.Model):
+#    __tablename__ = 'forecast'
+           
 @app.route('/')
 def index():
     stations= (session.query(Static, LatestDynamic)
@@ -64,8 +66,11 @@ def index():
         .order_by(LatestDynamic.last_update.desc())
 #        .limit(100)
         ).all()
+    weather = engine.execute("SELECT * FROM dublinbikedb.forecast")
+    weather = weather.first()
 
-    return render_template('index.html', stations=stations)
+
+    return render_template('index.html', stations=stations, weather = weather)
 
 
 if __name__ == "__main__":

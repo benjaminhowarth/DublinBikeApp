@@ -97,7 +97,26 @@ def createWeatherTable():
         engine.execute(sql)
     except Exception as e:
         print(e)
-        
+    
+def createForecastTable():
+    sql = """
+    CREATE TABLE IF NOT EXISTS forecast (
+    main VARCHAR(256),
+    description VARCHAR(256),
+    temperature FLOAT(4),
+    pressure INTEGER,
+    wind_speed FLOAT(4),
+    visibility DOUBLE,
+    sunrise DOUBLE,
+    sunset DOUBLE,
+    time BIGINT
+    )
+    """
+    try:
+        engine.execute(sql)
+    except Exception as e:
+        print(e)
+      
 def dropTable(tableName):
     sql = "DROP TABLE "+tableName
     try:
@@ -127,7 +146,7 @@ def openFile(file):
 def makeDF(input):
     myJson = json.loads(input)
     df = json_normalize(myJson, sep='_')
-    return dfnds 
+    return df 
 
 def write_to_static(input):
     df = makeDF(input)
@@ -156,6 +175,26 @@ def write_to_weather(input):
     df_weather = df_weather.rename(columns={'main_temp': 'temperature', 'main_pressure': 'pressure', 
                                             'sys_sunrise': 'sunrise', 'sys_sunset': 'sunset', 'dt': 'time'})
     df_weather.to_sql('weather', engine, if_exists='append', index=False)
+
+def write_to_forecast(input):
+    myJson = json.loads(input)
+    myJsonMain=json_normalize(myJson['list'][0]['main'])
+    myJsonWeather=json_normalize(myJson['list'][0]['weather'])
+    myJsonRain=json_normalize(myJson['list'][0]['rain'])
+    myJsonWind=json_normalize(myJson['list'][0]['wind'])
+    myJsonDt=json_normalize(myJson['list'][0])
+    
+    dfMain = myJsonMain[['temp', 'pressure', 'humidity']]
+    dfWeather=myJsonWeather[['main', 'description', 'icon']]
+    dfDt=myJsonDt[['dt', 'dt_txt']]
+    dfWind= myJsonWind
+    dfWind= dfWind.rename(columns={'speed': 'windSpeed'})
+    dfWind=dfWind[['windSpeed']]
+    dfRain= myJsonRain
+    dfRain = dfRain.rename(columns={'3h': 'percipitation'})
+    df_weather = pandas.concat([dfDt, dfWeather, dfMain, dfRain, dfWind], axis=1)
+    df_weather.to_sql('forecast', engine, if_exists='replace', index=False)
+        
     
 def dataDir_to_RDB():
     for file in glob.glob("./data/*"):
