@@ -62,7 +62,7 @@ def createDynamicTable():
         engine.execute(sql)
     except Exception as e:
         print(e)
-        
+
 def createLatestDynamicTable():
     sql = """
     CREATE TABLE IF NOT EXISTS latestDynamic (
@@ -72,6 +72,30 @@ def createLatestDynamicTable():
     available_bike_stands INTEGER,
     available_bikes INTEGER,
     last_update BIGINT
+    )
+    """
+    try:
+        engine.execute(sql)
+    except Exception as e:
+        print(e)
+        
+def createNewLatestDynamicTable():
+    sql = """
+    CREATE TABLE IF NOT EXISTS newLatestDynamic (
+    number INTEGER NOT NULL,
+    contract_name VARCHAR(256),
+    name VARCHAR(256),
+    address VARCHAR(256),
+    position_lat REAL,
+    position_lng REAL,
+    banking INTEGER,
+    bonus INTEGER,
+    status VARCHAR(256),
+    bike_stands INTEGER,
+    available_bike_stands INTEGER,
+    available_bikes INTEGER,
+    last_update BIGINT,
+    PRIMARY KEY (number)
     )
     """
     try:
@@ -159,12 +183,19 @@ def write_to_dynamic(input):
     df_dynamic = df[['number', 'status', 'bike_stands', 'available_bike_stands', 
                      'available_bikes', 'last_update']]   
     df_dynamic.to_sql('dynamic', engine, if_exists='append', index=False)
-    
+
 def write_to_latestDynamic(input):
     df = makeDF(input)
-    df_latestDynamic = df[['number', 'status', 'bike_stands', 'available_bike_stands', 
+    df_dynamic = df[['number', 'status', 'bike_stands', 'available_bike_stands', 
+                     'available_bikes', 'last_update']]   
+    df_dynamic.to_sql('dynamic', engine, if_exists='append', index=False)
+    
+def write_to_newLatestDynamic(input):
+    df = makeDF(input)
+    df_newLatestDynamic = df[['number', 'contract_name', 'name', 'address', 
+                    'position_lat', 'position_lng', 'banking', 'bonus', 'status', 'bike_stands', 'available_bike_stands', 
                      'available_bikes', 'last_update']] 
-    df_latestDynamic.to_sql('latestDynamic', engine, if_exists='replace', index=False)
+    df_newLatestDynamic.to_sql('newLatestDynamic', engine, if_exists='replace', index=False)
 
 def write_to_weather(input):
     df = makeDF(input)
