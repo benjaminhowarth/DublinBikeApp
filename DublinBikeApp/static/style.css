@@ -85,74 +85,8 @@ article {
 img {
 	align-self: flex-end;
 	width: 100%;
-}
-
-
-
-
-
-
-
-
-/*from https://www.w3schools.com/howto/howto_css_modals.asp */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-}
-
-#modalButtonDiv {
-	position: absolute;
-	width: 100px;
-	left: 6px;
-  	top: 23px;
-  	margin:0 auto;
-  	text-align:center;
-  	color: black;
-  	z-index: 1;
-  	font-family: 'Roboto';
-}
-
-#myBtn {
-	position: relative;
-  	width: 100% ;
-  	margin:0 auto;
-  	text-align:center;
-  	background-color: white;
-  	color: black;
-  	outline: none;
-  	border-radius: 12px;
-  	z-index: 1;
-  	font-family: 'Roboto';
-}
-
-.modal-content {
-	background-color: #fefefe;
-    margin: 12% auto; 
-    padding: 20px;
-    border: 1px solid #888;
-    width: 60%;
-    font-family: 'Roboto';
-}
-
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.close:hover, .close:focus {
-    color: black;
-    text-decoration: none;
-    cursor: pointer;
+	height: 300px;
+	margin-top:10px;
 }
 
 #weather{
@@ -160,12 +94,15 @@ img {
 	font-family: 'Roboto';
 	padding: 5px;
 	font-size: 15px;
+	max-height: 200px;
+	height: 100%;
 }
 
 #chart{
 	text-align: center;
 	font-family: 'Roboto';
 	font-size: 15px;
+	padding-bottom: 0px;
 	margin-left: 0px;
 	margin-right: 20px;
 }
