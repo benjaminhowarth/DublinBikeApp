@@ -22,7 +22,10 @@
 		<aside>
 			<header id="sidebarHeader">DUBLIN BIKE PLANNER</header>
 			<article>
-			
+			<div>
+					Pellentesque habtum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus eros eu erat. metus
+				</div>
+				<img src="./static/dublinBike.jpg">
 					<div id='weather'>
 			<h1>Weather</h1>
 				Temperature = {{weather.temp}}<br>				
@@ -33,12 +36,15 @@
 				<img style="height:70px;width:70px;" id='icon' src="http://openweathermap.org/img/w/{{weather.icon}}.png"> 
 				
 			</div>
+<<<<<<< HEAD
 				<img src="./static/dublinBike.jpg">
 			<div id="chart">
 			<h1>Station Occupancy</h1>
 			<div id='lineChart'></div>
 			</div>	
 			
+=======
+>>>>>>> branch 'master' of https://github.com/benjaminhowarth/DublinBikeApp.git
 			</article>
 		</aside>
 		<div id="mapContainer">
@@ -50,8 +56,8 @@
 		var markers = [
 			{% for station in stations %}
 			{
-			coords: {lat:{{station.Static.position_lat}}, lng:{{station.Static.position_lng}} {{ '}' }},
-			content: '<h3>{{station.Static.address}}</h3><h4>Bike Stands = {{station.LatestDynamic.bike_stands}}</h4><h4>Available Bikes = {{station.LatestDynamic.available_bikes}}</h4><h4>Available Bike Stands = {{station.LatestDynamic.available_bike_stands}}</h4>'
+			coords: {lat:{{station.position_lat}}, lng:{{station.position_lng}} {{ '}' }},
+			content: '<h3>{{station.address}}</h3><h4>Bike Stands = {{station.bike_stands}}</h4><h4>Available Bikes = {{station.available_bikes}}</h4><h4>Available Bike Stands = {{station.available_bike_stands}}</h4>'
 			},
 			{% endfor %}
 			];
