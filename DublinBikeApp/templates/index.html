@@ -10,24 +10,20 @@
 	<script type=text/javascript src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
-
 	<header id="mapHeader">DUBLIN BIKE PLANNER</header>
 	<main>
-	
 		<aside>
 			<header id="sidebarHeader">DUBLIN BIKE PLANNER</header>
 			<article>
-			
-					<div id='weather'>
-			<h1>Weather</h1>
-				Temperature = {{weather.temp}}<br>				
-				Date & Time = {{weather.dt_txt}}<br>
-				Conditions = {{weather.description}}<br>
-				Pressure = {{weather.pressure}}<br>
-				Humidity = {{weather.humidity}}<br>
-				<img style="height:70px;width:70px;" id='icon' src="http://openweathermap.org/img/w/{{weather.icon}}.png"> 
-				
-			</div>
+				<div id='weather'>
+				<h1>Weather</h1>
+					Temperature = {{weather.temp}}<br>				
+					Date & Time = {{weather.dt_txt}}<br>
+					Conditions = {{weather.description}}<br>
+					Pressure = {{weather.pressure}}<br>
+					Humidity = {{weather.humidity}}<br>
+					<img style="height:70px;width:70px;" id='icon' src="http://openweathermap.org/img/w/{{weather.icon}}.png"> 
+				</div>
 				<img src="./static/dublinBike.jpg">
 			</article>
 		</aside>

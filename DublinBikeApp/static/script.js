@@ -45,7 +45,9 @@ function initMap() {
 
 $(document).ready(function(){
 	$('#toggle').click(function() {
+		// clicks = True if button has been clicked before
 		var clicks = $(this).data('clicks');
+		// If clicks hasn't been clicked before...
 		if (!clicks) {
 			$(this).html("&lt;&lt;&lt;")
 			$('aside').addClass('open');
@@ -56,36 +58,10 @@ $(document).ready(function(){
 			$('aside').removeClass('open');
 			$('#mapHeader').fadeIn()
 		}
+		// Update clicks: if True, set False, if False, set True
 		$(this).data("clicks", !clicks);
 	});
 });
 
 
 
-
-//// Get the modal
-//var modal = document.getElementById('myModal');
-//
-//// Get the button that opens the modal
-//var btn = document.getElementById("myBtn");
-//
-//// Get the <span> element that closes the modal
-//var span = document.getElementsByClassName("close")[0];
-//
-//// When the user clicks on the button, open the modal 
-//btn.onclick = function() {
-//	modal.style.display = "block";
-//}
-//
-//// When the user clicks on <span> (x), close the modal
-//span.onclick = function() {
-//	modal.style.display = "none";
-//}
-//
-//// When the user clicks anywhere outside of the modal, close it
-//window.onclick = function(event) {
-//	if (event.target == modal) {
-//		modal.style.display = "none";
-//	}
-//}
-//

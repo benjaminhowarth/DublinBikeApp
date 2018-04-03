@@ -69,10 +69,8 @@ def index():
     weather = engine.execute("SELECT * FROM dublinbikedb.forecast")
     weather = weather.first()
 
-
-    return render_template('index.html', stations=stations, weather = weather)
+    return render_template('index.html', stations=stations, weather=weather)
 
 
 if __name__ == "__main__":
-
     app.run(host='0.0.0.0', port=5000, debug=True)
