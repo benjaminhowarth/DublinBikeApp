@@ -51,7 +51,7 @@
 			{% for station in stations %}
 			{
 			coords: {lat:{{station.position_lat}}, lng:{{station.position_lng}} {{ '}' }},
-			content: '<h3>{{station.address}}</h3><h4>Bike Stands = {{station.bike_stands}}</h4><h4>Available Bikes = {{station.available_bikes}}</h4><h4>Available Bike Stands = {{station.available_bike_stands}}</h4>'
+			content: '<a href = {{ url_for('chart', station_number=station.number) }} >{{station.number}}</a><h3>{{station.address}}</h3><h4>Bike Stands = {{station.bike_stands}}</h4><h4>Available Bikes = {{station.available_bikes}}</h4><h4>Available Bike Stands = {{station.available_bike_stands}}</h4>'
 			},
 			{% endfor %}
 			];
