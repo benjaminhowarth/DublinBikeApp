@@ -1,3 +1,6 @@
+// sidebar = true if sidebar is open
+var sidebar = false;
+
 // Code from Traversy Media - Google Maps JavaScript API Tutorial
 // https://www.youtube.com/watch?v=Zxf1mnP5zcw
 function initMap() {
@@ -19,8 +22,11 @@ function initMap() {
 		// Check for content
 		if(args.content){
 			marker.addListener('click', function(){
-				if(infoWindow) 
-					infoWindow.close();
+				if(infoWindow) {
+					infoWindow.close();				
+				}
+				
+				openSidebar();
 
 				infoWindow = new google.maps.InfoWindow({
 					content: args.content
@@ -37,8 +43,10 @@ function initMap() {
 	};
 
 	map.addListener('click', function() {
-		if(infoWindow ) 
+		if(infoWindow ) {
 			infoWindow.close();
+			closeSidebar()
+		}
 	});
 	
 	//generate the initial chart
@@ -79,19 +87,29 @@ function initMap() {
 	}
 }
 
+function openSidebar(){
+	$('#toggle').html("&lt;&lt;&lt;")
+	$('aside').addClass('open');
+	$('#toggleOpen').css("display", "none");
+	$('#mapHeader').fadeOut()
+	sidebar = true;
+}
+
+function closeSidebar() {
+	$('#toggle').html("&gt;&gt;&gt;")
+	$('aside').removeClass('open');
+	$('#mapHeader').fadeIn()
+	sidebar = false;
+}
+
 $(document).ready(function(){
 	$('#toggle').click(function() {
-		var clicks = $(this).data('clicks');
-		if (!clicks) {
-			$(this).html("&lt;&lt;&lt;")
-			$('aside').addClass('open');
-			$('#toggleOpen').css("display", "none");
-			$('#mapHeader').fadeOut()
+		// If sidebar is not open...
+		if (!sidebar) {
+			openSidebar()
 		} else {
-			$(this).html("&gt;&gt;&gt;")
-			$('aside').removeClass('open');
-			$('#mapHeader').fadeIn()
+			closeSidebar()
 		}
-		$(this).data("clicks", !clicks);
 	});
 });
+

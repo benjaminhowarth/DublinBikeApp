@@ -43,6 +43,7 @@ main {
 }
 
 #toggle {
+	display: block;
 	align-self: flex-start;
 	height: 40px;
 	width: 40px;
@@ -92,6 +93,76 @@ img {
 	width: 100%;
 	height: 300px;
 	margin-top:10px;
+}
+
+
+
+
+#buttonDiv {
+	position: relative;
+}
+
+button {
+	position: relative;
+}
+
+#weather{
+	position: relative;
+	text-align: center;
+	font-family: 'Roboto';
+	padding: 5px;
+	font-size: 15px;
+	max-height: 200px;
+	height: 100%;
+}
+
+#chart{
+	position: relative;
+	text-align: center;
+	font-family: 'Roboto';
+	font-size: 15px;
+	padding-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 20px;
+}
+
+#lineChart{
+	padding-right: 20px;
+	padding-left: 0px;
+	padding-bottom: 0px;
+}
+#buttonDiv {
+	position: relative;
+}
+
+button {
+	position: relative;
+}
+
+#weather{
+	position: relative;
+	text-align: center;
+	font-family: 'Roboto';
+	padding: 5px;
+	font-size: 15px;
+	max-height: 200px;
+	height: 100%;
+}
+
+#chart{
+	position: relative;
+	text-align: center;
+	font-family: 'Roboto';
+	font-size: 15px;
+	padding-bottom: 0px;
+	margin-left: 0px;
+	margin-right: 20px;
+}
+
+#lineChart{
+	padding-right: 20px;
+	padding-left: 0px;
+	padding-bottom: 0px;
 }
 
 #buttonDiv {
