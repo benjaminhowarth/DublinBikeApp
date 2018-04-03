@@ -13,6 +13,8 @@ PASSWORD = "password"
   
 engine = create_engine("mysql+mysqldb://{}:{}@{}:{}/{}"
                        .format(USER, PASSWORD, URI, PORT, DB), echo=True)
+
+print("connected")
           
 @app.route('/')
 def index():
@@ -20,6 +22,7 @@ def index():
     weather = engine.execute("SELECT * FROM dublinbikedb.forecast")
     weather = weather.first()
     return render_template('index.html', stations=stations, weather = weather)
+
 
 
 if __name__ == "__main__":

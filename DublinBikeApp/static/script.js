@@ -42,6 +42,7 @@ function initMap() {
 	});
 	
 	//generate the initial chart
+	
 	var chart = c3.generate({
 		bindto: '#chart',
 		data: {
