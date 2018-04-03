@@ -19,8 +19,11 @@ function initMap() {
 		// Check for content
 		if(args.content){
 			marker.addListener('click', function(){
-				if(infoWindow) 
-					infoWindow.close();
+				if(infoWindow) {
+					infoWindow.close();				
+				} else {
+					$('#toggle').click();
+				};
 
 				infoWindow = new google.maps.InfoWindow({
 					content: args.content
@@ -97,9 +100,4 @@ $(document).ready(function(){
 		$(this).data("clicks", !clicks);
 	});
 });
-<<<<<<< HEAD
 
-
-
-=======
->>>>>>> 4e7bc26006803baa2b3f4e0be537195cb887ba07

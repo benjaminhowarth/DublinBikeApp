@@ -95,7 +95,7 @@ img {
 	margin-top:10px;
 }
 
-<<<<<<< HEAD
+
 
 
 #buttonDiv {
@@ -164,16 +164,11 @@ button {
 	padding-left: 0px;
 	padding-bottom: 0px;
 }
+
 #buttonDiv {
 	position: relative;
 }
 
-=======
-#buttonDiv {
-	position: relative;
-}
-
->>>>>>> 4e7bc26006803baa2b3f4e0be537195cb887ba07
 button {
 	position: relative;
 }

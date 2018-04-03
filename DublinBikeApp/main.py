@@ -19,12 +19,7 @@ def index():
     stations= engine.execute("SELECT * FROM dublinbikedb.newLatestDynamic")
     weather = engine.execute("SELECT * FROM dublinbikedb.forecast")
     weather = weather.first()
-<<<<<<< HEAD
-
-    return render_template('index.html', stations=stations, weather=weather)
-=======
     return render_template('index.html', stations=stations, weather = weather)
->>>>>>> 4e7bc26006803baa2b3f4e0be537195cb887ba07
 
 
 if __name__ == "__main__":
