@@ -2,7 +2,7 @@ import requests
 import traceback
 import datetime
 import time
-from dbWriter import makeDF, write_to_static, write_to_dynamic, write_to_latestDynamic
+from dbWriter import makeDF, write_to_static, write_to_dynamic, write_to_newLatestDynamic
 APIKEY="6ea4678acfb75dfd8022fbb67f5170e2ba8bfcdc"
 CONTRACT="Dublin"
 STATIONS="https://api.jcdecaux.com/vls/v1/stations"
@@ -15,13 +15,13 @@ def write_to_file(text, now):
 
 def main():
     count = 0
-    while True:
+    while count ==0:
         try:
             now = datetime.datetime.now()
             response = requests.get(STATIONS, params={"apiKey": APIKEY, "contract": CONTRACT})
             print(response, now)
             write_to_dynamic(response.text)             
-            write_to_latestDynamic(response.text)            
+            write_to_newLatestDynamic(response.text)            
             time.sleep(5*60)
             count += 1
             # Once a day, update static table

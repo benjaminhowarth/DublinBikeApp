@@ -28,7 +28,6 @@ function initMap() {
 
 				infoWindow.open(map, marker);
 			});
-
 		}
 	}
 
@@ -41,6 +40,42 @@ function initMap() {
 		if(infoWindow ) 
 			infoWindow.close();
 	});
+	
+	//generate the initial chart
+	var chart = c3.generate({
+		bindto: '#chart',
+		data: {
+			columns:[
+				['data1', 100, 400, 100, 300, 150],
+				['data2', 50, 20, 40, 400, 50]
+			]
+		}
+	});
+	
+	var chartBtn1 = document.getElementById("chartBtn1");
+	var chartBtn2 = document.getElementById("chartBtn2");
+	
+	//change the data displayed on the chart with onclick events
+	chartBtn1.onclick = function(){
+		chart.load({
+			columns: [
+				['data1', 300, 100, 750, 200, 400],
+				['data2', 100, 400, 50, 300, 650],
+				['data3', 450, 150, 200, 400, 100]
+			], unload: ['data4'], 
+		});
+	}
+	
+	chartBtn2.onclick = function(){
+		chart.load({
+			columns: [
+				['data1', 100, 200, 250, 250, 400],
+				['data2', 400, 200, 100, 200, 350],
+				['data3', 150, 250, 350, 100, 50],
+				['data4', 300, 350, 400, 250, 300]
+			]
+		});
+	}
 }
 
 $(document).ready(function(){
@@ -62,6 +97,9 @@ $(document).ready(function(){
 		$(this).data("clicks", !clicks);
 	});
 });
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> 4e7bc26006803baa2b3f4e0be537195cb887ba07
