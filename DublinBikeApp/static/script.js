@@ -50,6 +50,10 @@ function initMap() {
 	});
 	
 	//generate the initial chart
+<<<<<<< HEAD
+=======
+	var localAddress = window.location.protocol
+>>>>>>> branch 'master' of https://github.com/benjaminhowarth/DublinBikeApp.git
 	var chart = c3.generate({
 		bindto: '#chart',
 		data: {
@@ -75,6 +79,7 @@ function initMap() {
 	}
 	
 	chartBtn2.onclick = function(){
+<<<<<<< HEAD
 		chart.load({
 			columns: [
 				['data1', 100, 200, 250, 250, 400],
@@ -82,6 +87,24 @@ function initMap() {
 				['data3', 150, 250, 350, 100, 50],
 				['data4', 300, 350, 400, 250, 300]
 			]
+=======
+		
+		$.getJSON(localAddress+"/chart/1", function(externaldata){
+			alert('in getJson')
+			chart = c3.generate({
+				title:{
+					text:"json data for station 1"
+				},
+				bindto: "#chart",
+				data:{
+					json: externaldata["chart"],
+					keys: {
+						value: ["available_bikes"],
+						
+					},
+				}
+			})
+>>>>>>> branch 'master' of https://github.com/benjaminhowarth/DublinBikeApp.git
 		});
 	}
 }

@@ -23,10 +23,11 @@ def main():
             write_to_forecast(response.text)   
             # update the forecast every 3 hours       
             time.sleep(3*60*60)
+    
         except:
             print(traceback.format_exc())
-            
-    return
+                
+        return
 
 main()
 
