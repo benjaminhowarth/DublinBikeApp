@@ -90,7 +90,6 @@ function initMap() {
 	chartBtn2.onclick = function(){
 		
 		$.getJSON(localAddress+"/chart/1", function(externaldata){
-			alert('in getJson')
 			chart = c3.generate({
 				title:{
 					text:"json data for station 1"
