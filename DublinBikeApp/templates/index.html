@@ -8,7 +8,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 	<script type=text/javascript src="{{ url_for('static', filename='script.js') }}"></script>
-	<!-- put files in static folder -->
+	<!-- put graph files in static folder -->
 	<link href="{{ url_for('static', filename='c3-master/c3.css') }}" charset="utf-8" rel="stylesheet">
 	<script src="{{ url_for('static', filename='d3/d3.min.js') }}" charset="utf-8"></script>
 	<script src="{{ url_for('static', filename='c3-master/c3.min.js') }}" charset="utf-8"></script>
@@ -20,25 +20,23 @@
 		<aside>
 			<header id="sidebarHeader">DUBLIN BIKE PLANNER</header>
 			<article>
-			<div>
-				Pellentesque habtum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque id cursus eros eu erat. metus
+				<div>
+					<img src="./static/dublinBike.jpg">
+					<div id='weather'>
+					<h1>Weather</h1>
+					Temperature = {{weather.temp}}<br>				
+					Date & Time = {{weather.dt_txt}}<br>
+					Conditions = {{weather.description}}<br>
+					Pressure = {{weather.pressure}}<br>
+					Humidity = {{weather.humidity}}<br>
+					<img style="height:70px;width:70px;" id='icon' src="http://openweathermap.org/img/w/{{weather.icon}}.png"> 
 				</div>
-				<img src="./static/dublinBike.jpg">
-				<div id='weather'>
-				<h1>Weather</h1>
-				Temperature = {{weather.temp}}<br>				
-				Date & Time = {{weather.dt_txt}}<br>
-				Conditions = {{weather.description}}<br>
-				Pressure = {{weather.pressure}}<br>
-				Humidity = {{weather.humidity}}<br>
-				<img style="height:70px;width:70px;" id='icon' src="http://openweathermap.org/img/w/{{weather.icon}}.png"> 
-			</div>
-			<div id='buttonDiv'>
-			<button id='chartBtn1'>Chart One</button>
-			<button id='chartBtn2'>Chart Two</button>
-			</div>
-			<div id="chart">
-			</div>	
+				<div id='buttonDiv'>
+					<button id='chartBtn1'>Chart One</button>
+					<button id='chartBtn2'>Chart Two</button>
+				</div>
+				<div id="chart"></div>
+				<script async defer>initChart()</script>
 			</article>
 		</aside>
 		<div id="mapContainer">
