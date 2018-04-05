@@ -1,5 +1,33 @@
 // sidebar = true if sidebar is open
 var sidebar = false;
+//generate the initial chart
+var localAddress = window.location.protocol
+
+function openSidebar(){
+	$('#toggle').html("&lt;&lt;&lt;")
+	$('aside').addClass('open');
+	$('#toggleOpen').css("display", "none");
+	$('#mapHeader').fadeOut()
+	sidebar = true;
+}
+
+function closeSidebar() {
+	$('#toggle').html("&gt;&gt;&gt;")
+	$('aside').removeClass('open');
+	$('#mapHeader').fadeIn()
+	sidebar = false;
+}
+
+$(document).ready(function(){
+	$('#toggle').click(function() {
+		// If sidebar is not open...
+		if (!sidebar) {
+			openSidebar()
+		} else {
+			closeSidebar()
+		}
+	});
+});
 
 // Code from Traversy Media - Google Maps JavaScript API Tutorial
 // https://www.youtube.com/watch?v=Zxf1mnP5zcw
@@ -48,9 +76,19 @@ function initMap() {
 			closeSidebar()
 		}
 	});
+}
+
+function initChart() {
+	var chartBtn1 = document.getElementById("chartBtn1");
+	var chartBtn2 = document.getElementById("chartBtn2");
 	
 	//generate the initial chart
+<<<<<<< HEAD
 	var localAddress = window.location.protocol 
+||||||| merged common ancestors
+	var localAddress = window.location.protocol
+=======
+>>>>>>> b8e67bfa601f92a8d034ec5cb6bae7e86eb4cd94
 	var chart = c3.generate({
 		bindto: '#chart',
 		data: {
@@ -60,9 +98,6 @@ function initMap() {
 			]
 		}
 	});
-	
-	var chartBtn1 = document.getElementById("chartBtn1");
-	var chartBtn2 = document.getElementById("chartBtn2");
 	
 	//change the data displayed on the chart with onclick events
 	chartBtn1.onclick = function(){
@@ -74,21 +109,9 @@ function initMap() {
 			], unload: ['data1', 'data2' , 'data3'], 
 		});
 	}
-	
-//	chartBtn2.onclick = function(){
-//		chart.load({
-//			columns: [
-//				['data1', 100, 200, 250, 250, 400],
-//				['data2', 400, 200, 100, 200, 350],
-//				['data3', 150, 250, 350, 100, 50],
-//				['data4', 300, 350, 400, 250, 300]
-//			]
-//		});
-//	}
 
-// go into support center and ask about this 
+	//go into support center and ask about this 
 	chartBtn2.onclick = function(){
-		
 		$.getJSON(localAddress+"/chart/1", function(externaldata){
 			alert('in getJson')
 			chart = c3.generate({
@@ -105,34 +128,6 @@ function initMap() {
 				}
 			})
 		});
-	}
 }
-
-
-
-function openSidebar(){
-	$('#toggle').html("&lt;&lt;&lt;")
-	$('aside').addClass('open');
-	$('#toggleOpen').css("display", "none");
-	$('#mapHeader').fadeOut()
-	sidebar = true;
 }
-
-function closeSidebar() {
-	$('#toggle').html("&gt;&gt;&gt;")
-	$('aside').removeClass('open');
-	$('#mapHeader').fadeIn()
-	sidebar = false;
-}
-
-$(document).ready(function(){
-	$('#toggle').click(function() {
-		// If sidebar is not open...
-		if (!sidebar) {
-			openSidebar()
-		} else {
-			closeSidebar()
-		}
-	});
-});
 
