@@ -83,12 +83,9 @@ function initChart() {
 	var chartBtn2 = document.getElementById("chartBtn2");
 	
 	//generate the initial chart
-<<<<<<< HEAD
-	var localAddress = window.location.protocol 
-||||||| merged common ancestors
+
 	var localAddress = window.location.protocol
-=======
->>>>>>> b8e67bfa601f92a8d034ec5cb6bae7e86eb4cd94
+
 	var chart = c3.generate({
 		bindto: '#chart',
 		data: {

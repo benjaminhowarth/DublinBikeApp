@@ -37,21 +37,16 @@ def close_connection(exception):
 def chart(station_number):
     engine = get_db()
     chartData = []
-<<<<<<< HEAD
-    rows = engine.execute("SELECT available_bikes, bike_stands, DAYNAME(FROM_UNIXTIME(last_update/1000)) as Day, CONCAT(HOUR(FROM_UNIXTIME(last_update/1000)),':', MINUTE(FROM_UNIXTIME(last_update/1000))) as Time FROM dublinbikedb.static JOIN dublinbikedb.dynamic ON dublinbikedb.static.number = dublinbikedb.dynamic.number where dublinbikedb.static.number = '{}'".format(station_number))
-||||||| merged common ancestors
-    rows = engine.execute("SELECT available_bikes, bike_stands, last_update FROM dublinbikedb.static JOIN dublinbikedb.dynamic ON dublinbikedb.static.number = dublinbikedb.dynamic.number where dublinbikedb.static.number = '{}'".format(station_number))
-=======
-    
+#    rows = engine.execute("SELECT available_bikes, bike_stands, DAYNAME(FROM_UNIXTIME(last_update/1000)) as Day, CONCAT(HOUR(FROM_UNIXTIME(last_update/1000)),':', MINUTE(FROM_UNIXTIME(last_update/1000))) as Time FROM dublinbikedb.static JOIN dublinbikedb.dynamic ON dublinbikedb.static.number = dublinbikedb.dynamic.number where dublinbikedb.static.number = '{}'".format(station_number))
     sql = """
-    SELECT available_bikes, bike_stands, last_update 
+    SELECT available_bikes, bike_stands, DAYNAME(FROM_UNIXTIME(last_update/1000)) as Day,
+    CONCAT(HOUR(FROM_UNIXTIME(last_update/1000)),':', MINUTE(FROM_UNIXTIME(last_update/1000))) as Time
     FROM dublinbikedb.static 
     JOIN dublinbikedb.dynamic ON dublinbikedb.static.number = dublinbikedb.dynamic.number 
     WHERE dublinbikedb.static.number = '{}'
     """.format(station_number)
     
     rows = engine.execute(sql)
->>>>>>> b8e67bfa601f92a8d034ec5cb6bae7e86eb4cd94
     for row in rows: 
         chartData.append(dict(row))
     
