@@ -50,7 +50,6 @@ function initMap() {
 	});
 	
 	//generate the initial chart
-	
 	var chart = c3.generate({
 		bindto: '#chart',
 		data: {
@@ -71,42 +70,21 @@ function initMap() {
 				['data1', 300, 100, 750, 200, 400],
 				['data2', 100, 400, 50, 300, 650],
 				['data3', 450, 150, 200, 400, 100]
-			], unload: ['data1', 'data2' , 'data3'], 
+			], unload: ['data4'], 
 		});
 	}
 	
-//	chartBtn2.onclick = function(){
-//		chart.load({
-//			columns: [
-//				['data1', 100, 200, 250, 250, 400],
-//				['data2', 400, 200, 100, 200, 350],
-//				['data3', 150, 250, 350, 100, 50],
-//				['data4', 300, 350, 400, 250, 300]
-//			]
-//		});
-//	}
-
-// go into support center and ask about this 
 	chartBtn2.onclick = function(){
-		$.getJSON("http://0.0.0.0:5000/chart/1", function(externaldata){
-			chart = c3.generate({
-				title:{
-					text:"json data for station 1"
-				},
-				bindto: "#chart",
-				data:{
-					json: externaldata["chart"],
-					keys: {
-						value: ["available_bikes"],
-						
-					},
-				}
-			})
+		chart.load({
+			columns: [
+				['data1', 100, 200, 250, 250, 400],
+				['data2', 400, 200, 100, 200, 350],
+				['data3', 150, 250, 350, 100, 50],
+				['data4', 300, 350, 400, 250, 300]
+			]
 		});
 	}
 }
-
-
 
 function openSidebar(){
 	$('#toggle').html("&lt;&lt;&lt;")
