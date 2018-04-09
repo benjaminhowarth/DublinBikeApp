@@ -209,21 +209,27 @@ def write_to_weather(input):
 
 def write_to_forecast(input):
     myJson = json.loads(input)
-    myJsonMain=json_normalize(myJson['list'][0]['main'])
-    myJsonWeather=json_normalize(myJson['list'][0]['weather'])
-    myJsonRain=json_normalize(myJson['list'][0]['rain'])
-    myJsonWind=json_normalize(myJson['list'][0]['wind'])
-    myJsonDt=json_normalize(myJson['list'][0])
-    
+    myJsonMain=[]
+    myJsonWeather = []
+    myJsonWind =[]
+    myJsonDt = []
+    count= myJson['cnt']
+    for i in range(count):
+        myJsonMain.append(myJson['list'][i]['main'])
+        myJsonWeather.append(myJson['list'][i]['weather'][0])
+        myJsonWind.append(myJson['list'][i]['wind'])   
+        myJsonDt.append(myJson['list'][i])
+    myJsonMain=json_normalize(myJsonMain)
+    myJsonDt=json_normalize(myJsonDt)
+    myJsonWeather=json_normalize(myJsonWeather)
+    myJsonWind=json_normalize(myJsonWind)
     dfMain = myJsonMain[['temp', 'pressure', 'humidity']]
     dfWeather=myJsonWeather[['main', 'description', 'icon']]
     dfDt=myJsonDt[['dt', 'dt_txt']]
     dfWind= myJsonWind
     dfWind= dfWind.rename(columns={'speed': 'windSpeed'})
     dfWind=dfWind[['windSpeed']]
-    dfRain= myJsonRain
-    dfRain = dfRain.rename(columns={'3h': 'percipitation'})
-    df_weather = pandas.concat([dfDt, dfWeather, dfMain, dfRain, dfWind], axis=1)
+    df_weather = pandas.concat([dfDt,dfWeather, dfMain, dfWind], axis=1)
     df_weather.to_sql('forecast', engine, if_exists='replace', index=False)
         
     
