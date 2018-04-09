@@ -43,18 +43,6 @@
 			<button id="toggle">&gt;&gt;&gt;</button>
 			<div id='map'></div>		
 		</div>
-		<script>
-		// Pass marker values from flask app into template.
-		var markers = [
-			{% for station in stations %}
-			{
-			coords: {lat:{{station.position_lat}}, lng:{{station.position_lng}} {{ '}' }},
-			content: '<a href = {{ url_for('chart', station_number=station.number) }} >{{station.number}}</a><h3>{{station.address}}</h3><h4>Bike Stands = {{station.bike_stands}}</h4><h4>Available Bikes = {{station.available_bikes}}</h4><h4>Available Bike Stands = {{station.available_bike_stands}}</h4>'
-			},
-			{% endfor %}
-			];
-		
-		</script>
 		<script async defer 
 			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA&callback=initMap">
 		</script>

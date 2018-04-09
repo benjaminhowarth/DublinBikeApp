@@ -33,6 +33,7 @@ $(document).ready(function(){
 // https://www.youtube.com/watch?v=Zxf1mnP5zcw
 function initMap() {
 	var dublin = {lat: 53.3484906, lng: -6.2551201};
+	var infoWindow;
 
 	// Create Map
 	var map = new google.maps.Map(document.getElementById('map'), {
@@ -41,50 +42,56 @@ function initMap() {
 	mapTypeControl: false
 	});
 	
-	function addMarker(args){
+	function addMarker(station){
 		var marker = new google.maps.Marker({
-			position: args.coords,
+			position: {
+                lat : station.position_lat,
+                lng : station.position_lng
+            },
 			map: map
 		});
 
-		// Check for content
-		if(args.content){
-			marker.addListener('click', function(){
-				if(infoWindow) {
-					infoWindow.close();				
-				}
-				
-				openSidebar();
 
-				infoWindow = new google.maps.InfoWindow({
-					content: args.content
-				});
+		marker.addListener('click', function(){
+			if(infoWindow) {
+				infoWindow.close();				
+			}
+			
+			openSidebar();
 
-				infoWindow.open(map, marker);
+			infoWindow = new google.maps.InfoWindow({
+				content: '<a href="./chart/'+station.number+'">'+station.number+'</a>'+
+							'<h3>'+station.address+'</h3>'+
+							'<h4>Bike Stands = '+station.bike_stands+'</h4>'+
+							'<h4>Available Bikes = '+station.available_bikes+'</h4>'+
+							'<h4>Available Bike Stands = '+station.available_bike_stands+'</h4>'
+
 			});
-		}
+
+			infoWindow.open(map, marker);
+		});
 	}
 
-	var infoWindow;
-	for(var i = 0; i < markers.length; i++){
-		addMarker(markers[i]);
-	};
+	$.getJSON(localAddress+"/stations", null, function(data) {
+		if ('stationJson' in data) {
+			var stations = data.stationJson;
+			for (var i=0; i < stations.length; i++){
+				addMarker(stations[i]);
+			};
+		};
+	});
 
 	map.addListener('click', function() {
 		if(infoWindow ) {
 			infoWindow.close();
-			closeSidebar()
 		}
+		closeSidebar()
 	});
 }
 
 function initChart() {
 	var chartBtn1 = document.getElementById("chartBtn1");
 	var chartBtn2 = document.getElementById("chartBtn2");
-	
-	//generate the initial chart
-
-	var localAddress = window.location.protocol
 
 	var chart = c3.generate({
 		bindto: '#chart',
