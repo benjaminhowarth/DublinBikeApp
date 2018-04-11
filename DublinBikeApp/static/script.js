@@ -133,5 +133,25 @@ function initChart() {
 			})
 		});
 }
+	
 }
+
+
+function showWeather(){
+	var x = document.getElementById("weather")
+		$.getJSON(localAddress+"/weather", null, function(results) {
+			x.innerHTML ="<h1>Forecast</h1>"
+			if ('weatherlist' in results) {
+				var weather = results.weatherlist;
+				for (var i=0; i < 5; i++){
+					var string =weather[i].dt_txt;
+					var res = string.slice(11, 16);
+					x.innerHTML += "<div>Time: "+res+" <img style='height:30px;width:30px;' id='icon' src=http://openweathermap.org/img/w/"+weather[i].icon+".png>"+ weather[i].description+" <div>"
+				};
+				x.innerHTML += "</table>"
+			};
+		});
+}
+
+	
 

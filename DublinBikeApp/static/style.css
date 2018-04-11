@@ -41,7 +41,7 @@ main {
 	width: 100%;
 	background-color: lightgrey;
 }
-
+	
 #toggle {
 	display: block;
 	align-self: flex-start;
@@ -177,9 +177,9 @@ button {
 	position: relative;
 	text-align: center;
 	font-family: 'Roboto';
-	padding: 5px;
+	padding: 0px;
 	font-size: 15px;
-	max-height: 200px;
+	max-height: 350px;
 	height: 100%;
 }
 

@@ -14,29 +14,22 @@
 	<script src="{{ url_for('static', filename='c3-master/c3.min.js') }}" charset="utf-8"></script>
 	
 </head>
-<body>
+<body onload='showWeather(), initChart()'>
 	<header id="mapHeader">DUBLIN BIKE PLANNER</header>
 	<main>
 		<aside>
 			<header id="sidebarHeader">DUBLIN BIKE PLANNER</header>
 			<article>
-				<div>
+				
 					<img src="./static/dublinBike.jpg">
-					<div id='weather'>
-					<h1>Weather</h1>
-					Temperature = {{weather.temp}}<br>				
-					Date & Time = {{weather.dt_txt}}<br>
-					Conditions = {{weather.description}}<br>
-					Pressure = {{weather.pressure}}<br>
-					Humidity = {{weather.humidity}}<br>
-					<img style="height:70px;width:70px;" id='icon' src="http://openweathermap.org/img/w/{{weather.icon}}.png"> 
-				</div>
+					<div id='weather' >
+					</div>
 				<div id='buttonDiv'>
 					<button id='chartBtn1'>Chart One</button>
 					<button id='chartBtn2'>Chart Two</button>
 				</div>
 				<div id="chart"></div>
-				<script async defer>initChart()</script>
+				
 			</article>
 		</aside>
 		<div id="mapContainer">
