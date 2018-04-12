@@ -70,6 +70,7 @@ aside {
 .open {
 	flex-grow: 2;
 	margin-left: 0px;
+	min-width:300px;
 }
 
 #sidebarHeader {

@@ -31,6 +31,7 @@ $(document).ready(function(){
 
 // Code from Traversy Media - Google Maps JavaScript API Tutorial
 // https://www.youtube.com/watch?v=Zxf1mnP5zcw
+var ChartStationNum;
 function initMap() {
 	var dublin = {lat: 53.3484906, lng: -6.2551201};
 	var infoWindow;
@@ -65,10 +66,13 @@ function initMap() {
 							'<h4>Bike Stands = '+station.bike_stands+'</h4>'+
 							'<h4>Available Bikes = '+station.available_bikes+'</h4>'+
 							'<h4>Available Bike Stands = '+station.available_bike_stands+'</h4>'
-
 			});
 
 			infoWindow.open(map, marker);
+			
+			ChartStationNum = station.number;
+			
+			
 		});
 	}
 
@@ -116,11 +120,11 @@ function initChart() {
 
 	//go into support center and ask about this 
 	chartBtn2.onclick = function(){
-		$.getJSON(localAddress+"/chart/1", function(externaldata){
-			alert('in getJson')
+		var stationNo = 1;
+		$.getJSON(localAddress+"/chart/"+ChartStationNum, function(externaldata){
 			chart = c3.generate({
 				title:{
-					text:"json data for station 1"
+					text:"json data for station "+ ChartStationNum
 				},
 				bindto: "#chart",
 				data:{
