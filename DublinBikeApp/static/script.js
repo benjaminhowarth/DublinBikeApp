@@ -1,10 +1,8 @@
-// sidebar = true if sidebar is open
-var sidebar = false;
-//generate the initial chart
-var localAddress = window.location.protocol
+var sidebar = false; // sidebar = true if sidebar is open
+var localAddress = window.location.protocol // Local url
 
 function openSidebar(){
-//	$('#toggle').html("&lt;&lt;&lt;")
+	$('#toggle').html("&lt;&lt;&lt;")
 	$('aside').addClass('open');
 	$('#toggleOpen').css("display", "none");
 	$('#mapHeader').fadeOut()
@@ -12,9 +10,9 @@ function openSidebar(){
 }
 
 function closeSidebar() {
-//	$('#toggle').html("&gt;&gt;&gt;")
+	$('#toggle').html("&gt;&gt;&gt;")
 	$('aside').removeClass('open');
-	$('#mapHeader').fadeIn();
+	$('#mapHeader').fadeIn()
 	sidebar = false;
 }
 
@@ -28,19 +26,6 @@ $(document).ready(function(){
 		}
 	});
 });
-
-// Code from Traversy Media - Google Maps JavaScript API Tutorial
-// https://www.youtube.com/watch?v=Zxf1mnP5zcw
-var ChartStationNum;
-var ChartStationAddress;
-
-var dataMon;
-var dataTue;
-var dataWed;
-var dataThu;
-var DataFri;
-var dataSat;
-var dataSun; 
 
 function initMap() {
 	var dublin = {lat: 53.3484906, lng: -6.2551201};
@@ -65,7 +50,7 @@ function initMap() {
 	        "elementType": "geometry.fill",
 	        "stylers": [
 	            {"visibility": "on"},
-	            {"hue": "#1100ff"},
+	            {"hue": "#1900ff"},
 	            {"color": "#c0e8e8"}
 	        ]
 	    },
@@ -91,10 +76,6 @@ function initMap() {
 	        "stylers": [
 	            {"visibility": "on"},
 	            { "lightness": 700}]
-	    },
-	    {"featureType": "transit",
-	        "stylers": [
-	            {"visibility": "off"}]
 	    },
 	    {"featureType": "water",
 	        "elementType": "all",
@@ -130,25 +111,7 @@ function initMap() {
 
 			infoWindow.open(map, marker);
 			
-			ChartStationNum = station.number;
-			ChartStationAddress = station.address;
-			$.getJSON(localAddress+"chart/"+ChartStationNum, function(externaldata){
-				dataMon = Object.values(externaldata.mon);
-				dataTue = Object.values(externaldata.tue);
-				dataWed = Object.values(externaldata.wed);
-				dataThu = Object.values(externaldata.thu);
-				dataFri = Object.values(externaldata.fri);
-				dataSat = Object.values(externaldata.sat);
-				dataSun = Object.values(externaldata.sun);
-				// Find a way to trigger button2 when these values are finished updating. 
-				dataMon.unshift("Monday");
-				dataTue.unshift("Tuesday");
-				dataWed.unshift("Wednesday");
-				dataThu.unshift("Thursday");
-				dataFri.unshift("Friday");
-				dataSat.unshift("Saturday");
-				dataSun.unshift("Sunday");
-			})	
+			initChart(station.number, station.address)
 		});
 	}
 
@@ -167,43 +130,77 @@ function initMap() {
 		}
 		closeSidebar()
 	});
+}
 
 $(document).ready(function(){
 	$('#startUpMessage').fadeIn(3000).delay(3000).fadeOut(2000);
 });
-}
 
-function initChart() {
-	var chartBtn1 = document.getElementById("chartBtn1");
-	var chartBtn2 = document.getElementById("chartBtn2");
-
-	var chart = c3.generate({
-		title:{
-			text:"Bike availability"
-		},
-		bindto: "#chart",
-		data:{
-			json:{
-				Monday: [0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10,0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10],
-				Tuesday: [20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0],
-				Wednesday: [0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20],
-				Thursday: [30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0],
-				Friday: [0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30,0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30],
-				Saturday: [40,0,40,0, 40, 0, 40,0,40,0, 40, 0,40,0,40,0, 40, 0, 40,0,40,0, 40, 0],
-				Sunday: [0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40,0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40]
-			},
-			type: 'spline'
-		},
-		point: {
-	        show: false
-			},
-		zoom: {
-			enabled: true
-	}
-});
+function initChart(ChartStationNum, ChartStationAddress) {
+//	document.getElementById("chart-loading-div").style.display = 'flex';
+//	document.getElementById("chart").style.display = 'none'
+	document.getElementById("buttonDiv").style.display = 'flex'
 	
-	//change the data displayed on the chart with onclick events
+	$.getJSON(localAddress+"chart/"+ChartStationNum, function(externaldata){
+		
+		dataMon = Object.values(externaldata.mon);
+		dataTue = Object.values(externaldata.tue);
+		dataWed = Object.values(externaldata.wed);
+		dataThu = Object.values(externaldata.thu);
+		dataFri = Object.values(externaldata.fri);
+		dataSat = Object.values(externaldata.sat);
+		dataSun = Object.values(externaldata.sun);
+		
+		chart = c3.generate({
+			title: {
+				text:"Available Bikes at " + ChartStationAddress
+			},
+			bindto: document.getElementById("chart"),
+			data: {
+				json: {
+					Monday: dataMon,
+					Tuesday: dataTue,
+					Wednesday: dataWed,
+					Thursday: dataThu,
+					Friday: dataFri,
+					Saturday: dataSat,
+					Sunday: dataSun
+				},
+				type: 'spline'
+			},
+			axis: {
+				x: {
+					label: 'Hours'
+				},
+				y: {
+					label: 'Average Available Bikes'
+				}
+			},
+			point: {
+				show: false
+			},
+			zoom: {
+				enabled: true
+			}
+		});
+	})
+	
 	chartBtn1.onclick = function(){
+		chart.load({
+			unload: true,
+			columns:[
+				dataMon,
+				dataTue,
+				dataWed,
+				dataThu,
+				dataFri,
+				dataSat,
+				dataSun
+			]
+		});
+	}
+	
+	chartBtn2.onclick = function(){
 		chart.load({
 			unload: true,
 			columns: [
@@ -219,33 +216,29 @@ function initChart() {
 		});
 	}
 	
-	chartBtn2.onclick = function(){
-		chart.load({
-				columns:[
-					dataMon,
-					dataTue,
-					dataWed,
-					dataThu,
-					dataFri,
-					dataSat,
-					dataSun
-				]
-		});
-	}	
+//	document.getElementById("chart-loading-div").style.display = 'none';
+//	document.getElementById("chart").style.display = 'flex'
 }
 
-function showWeather(){
-	var x = document.getElementById("weather")
-		$.getJSON(localAddress+"/weather", null, function(results) {
-			x.innerHTML ="<h1>Forecast</h1>"
-			if ('weatherlist' in results) {
-				var weather = results.weatherlist;
-				for (var i=0; i < 5; i++){
-					var string =weather[i].dt_txt;
-					var res = string.slice(11, 16);
-					x.innerHTML += "<div>Time: "+res+" <img style='height:30px;width:30px;' id='icon' src=http://openweathermap.org/img/w/"+weather[i].icon+".png>"+ weather[i].description+" <div>"
-				};
-				x.innerHTML += "</table>"
+function showWeather(){	
+	document.getElementById("weather-loading-div").style.display = 'flex';
+	document.getElementById("weather").style.display = 'none'
+	
+	var weatherDiv = document.getElementById("weather")
+	$.getJSON(localAddress+"/weather", null, function(results) {
+		if ('weatherlist' in results) {
+			var weather = results.weatherlist;
+			for (var i=0; i < 5; i++){
+				var string =weather[i].dt_txt;
+				var weatherTime = string.slice(11, 16);
+				weatherDiv.innerHTML += '<div><div>'+
+					'<img title="'+weather[i].description+'"'+
+					'class="icon" src=http://openweathermap.org/img/w/'+weather[i].icon+'.png>'+
+					'</div>'+weatherTime+'<div>'
 			};
-		});
+		};
+	});
+	
+	document.getElementById("weather-loading-div").style.display = 'none';
+	document.getElementById("weather").style.display = 'flex'
 }

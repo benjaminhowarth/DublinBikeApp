@@ -14,28 +14,25 @@
 	<script src="{{ url_for('static', filename='c3-master/c3.min.js') }}" charset="utf-8"></script>
 	
 </head>
-<body onload='showWeather(), initChart()'>
+<body onload='showWeather()'>
 	<header id="mapHeader">DUBLIN BIKE PLANNER</header>
 	<main>
 		<aside>
 			<header id="sidebarHeader">DUBLIN BIKE PLANNER</header>
 			<article>
-				
-					<img src="./static/dublinBike.jpg">
-					
+				<img id="dbImage" src="./static/dublinBike.jpg">
+				<div id='weather-loading-div'>
+					<img id='weather-loading-image' src='static/loading.gif' alt='loading...'>
+				</div>
+				<div id='weather' ></div>
 				<div id='buttonDiv'>
 					<button id='chartBtn1'>Chart One</button>
 					<button id='chartBtn2'>Chart Two</button>
 				</div>
-				
-				<div id="chart">
-					<img id='chart-loading-image' src='static/loading.gif' alt='loading...'>
+				<div id='chart-loading-div'>
+					<img id="chart-loading-image" src="static/loading.gif" alt="loading...">
 				</div>
-				
-				<div id='weather' >
-					<img id='weather-loading-image' src='static/loading.gif' alt='loading...'>
-					</div>
-					
+				<div id="chart"></div>	
 			</article>
 		</aside>
 		<div id="mapContainer">
@@ -50,5 +47,4 @@
 
 </body>
 </html>
-
 
