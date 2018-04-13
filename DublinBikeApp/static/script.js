@@ -45,12 +45,58 @@ var dataSun;
 function initMap() {
 	var dublin = {lat: 53.3484906, lng: -6.2551201};
 	var infoWindow;
+	var icon='http://icons.iconarchive.com/icons/elegantthemes/beautiful-flat-one-color/32/bike-icon.png';
 
 	// Create Map
 	var map = new google.maps.Map(document.getElementById('map'), {
 	zoom: 14,
 	center: dublin,
-	mapTypeControl: false
+	mapTypeControl: false,
+	styles: [
+	    {"featureType": "landscape.natural",
+	        "elementType": "geometry.fill",
+	        "stylers": [
+	            {"visibility": "on"},
+	            {"color": "#e0efef"}
+	        ]
+	    },
+	    {"featureType": "poi",
+	        "elementType": "geometry.fill",
+	        "stylers": [
+	            {"visibility": "on"},
+	            {"hue": "#1900ff"},
+	            {"color": "#c0e8e8"}
+	        ]
+	    },
+	    {"featureType": "road",
+	        "elementType": "geometry",
+	        "stylers": [
+	            {"lightness": 100},
+	            {"visibility": "simplified"}]
+	    },
+	    {"featureType": "poi",
+	        "elementType": "labels",
+	        "stylers": [
+	            {"visibility": "off"}]
+	    },
+	    {"featureType": "road",
+	        "elementType": "labels",
+	        "stylers": [
+	            {"visibility": "off"}
+	        ]
+	    },
+	    {"featureType": "transit.line",
+	        "elementType": "geometry",
+	        "stylers": [
+	            {"visibility": "on"},
+	            { "lightness": 700}]
+	    },
+	    {"featureType": "water",
+	        "elementType": "all",
+	        "stylers": [
+	            { "color": "#99ddff"}]
+	    }
+	]
 	});
 	
 	function addMarker(station){
@@ -59,7 +105,8 @@ function initMap() {
                 lat : station.position_lat,
                 lng : station.position_lng
             },
-			map: map
+			map: map,
+			icon: icon
 		});
 
 
