@@ -189,13 +189,13 @@ function initChart(ChartStationNum, ChartStationAddress) {
 		chart.load({
 			unload: true,
 			columns:[
-				dataMon,
-				dataTue,
-				dataWed,
-				dataThu,
-				dataFri,
-				dataSat,
-				dataSun
+				['Monday'].concat(dataMon),
+				['Tuesday'].concat(dataTue),
+				['Wednesday'].concat(dataWed),
+				['Thursday'].concat(dataThu),
+				['Friday'].concat(dataFri),
+				['Saturday'].concat(dataSat),
+				['Sunday'].concat(dataSun)
 			]
 		});
 	}
@@ -212,7 +212,7 @@ function initChart(ChartStationNum, ChartStationAddress) {
 				["Saturday", 40,0,40,0, 40, 0, 40,0,40,0, 40, 0,40,0,40,0, 40, 0, 40,0,40,0, 40, 0],
 				["Sunday", 0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40,0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40]
 				
-			], unload: ['data1', 'data2' , 'data3'], 
+			] 
 		});
 	}
 	
