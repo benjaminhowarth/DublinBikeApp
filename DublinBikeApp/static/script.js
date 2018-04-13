@@ -52,6 +52,7 @@ function initMap() {
 	zoom: 14,
 	center: dublin,
 	mapTypeControl: false,
+	// styles the map
 	styles: [
 	    {"featureType": "landscape.natural",
 	        "elementType": "geometry.fill",
@@ -95,9 +96,7 @@ function initMap() {
 	        "elementType": "all",
 	        "stylers": [
 	            { "color": "#99ddff"}]
-	    }
-	]
-	});
+	    }]});
 	
 	function addMarker(station){
 		var marker = new google.maps.Marker({

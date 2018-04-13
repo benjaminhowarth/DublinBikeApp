@@ -105,6 +105,15 @@ def weather():
         weatherlist.append(dict(i))
     return jsonify(weatherlist=weatherlist)
 
+@app.route("/pastWeather")
+def pastWeather():
+    engine=get_db()
+    pastWeatherList=[]
+    pastWeather =engine.execute("SELECT * FROM dublinbikedb.weather")
+    for row in pastWeather:
+        pastWeatherList.append(dict(row))
+    return jsonify(pastWeatherList=pastWeatherList)
+
 @app.route('/')
 @functools.lru_cache(maxsize=128)
 def index():
