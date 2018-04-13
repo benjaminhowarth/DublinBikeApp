@@ -19,7 +19,8 @@ body {
 	padding-top: 5px;
 	word-spacing: 10px;
 	font-size: 35px;
-	color:#004466
+	color:#004466;
+	opacity:0.8;
 }
 
 main {
