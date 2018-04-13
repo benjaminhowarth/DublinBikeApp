@@ -4,7 +4,7 @@ var sidebar = false;
 var localAddress = window.location.protocol
 
 function openSidebar(){
-	$('#toggle').html("&lt;&lt;&lt;")
+//	$('#toggle').html("&lt;&lt;&lt;")
 	$('aside').addClass('open');
 	$('#toggleOpen').css("display", "none");
 	$('#mapHeader').fadeOut()
@@ -12,7 +12,7 @@ function openSidebar(){
 }
 
 function closeSidebar() {
-	$('#toggle').html("&gt;&gt;&gt;")
+//	$('#toggle').html("&gt;&gt;&gt;")
 	$('aside').removeClass('open');
 	$('#mapHeader').fadeIn()
 	sidebar = false;
@@ -32,6 +32,16 @@ $(document).ready(function(){
 // Code from Traversy Media - Google Maps JavaScript API Tutorial
 // https://www.youtube.com/watch?v=Zxf1mnP5zcw
 var ChartStationNum;
+var ChartStationAddress;
+
+var dataMon;
+var dataTue;
+var dataWed;
+var dataThu;
+var DataFri;
+var dataSat;
+var dataSun; 
+
 function initMap() {
 	var dublin = {lat: 53.3484906, lng: -6.2551201};
 	var infoWindow;
@@ -71,7 +81,17 @@ function initMap() {
 			infoWindow.open(map, marker);
 			
 			ChartStationNum = station.number;
-			
+			ChartStationAddress = station.address;
+			$.getJSON(localAddress+"chart/"+ChartStationNum, function(externaldata){
+				dataMon = Object.values(externaldata.mon);
+				dataTue = Object.values(externaldata.tue);
+				dataWed = Object.values(externaldata.wed);
+				dataThu = Object.values(externaldata.thu);
+				dataFri = Object.values(externaldata.fri);
+				dataSat = Object.values(externaldata.sat);
+				dataSun = Object.values(externaldata.sun);
+				// Find a way to trigger button2 when these values are finished updating. 
+			})
 			
 		});
 	}
@@ -91,6 +111,10 @@ function initMap() {
 		}
 		closeSidebar()
 	});
+
+$(document).ready(function(){
+	$('#startUpMessage').fadeIn(3000).delay(3000).fadeOut(2000);
+});
 }
 
 function initChart() {
@@ -118,28 +142,44 @@ function initChart() {
 		});
 	}
 
-	//go into support center and ask about this 
-	chartBtn2.onclick = function(){
-		var stationNo = 1;
-		$.getJSON(localAddress+"/chart/"+ChartStationNum, function(externaldata){
-			chart = c3.generate({
-				title:{
-					text:"json data for station "+ ChartStationNum
-				},
-				bindto: "#chart",
-				data:{
-					json: externaldata["chart"],
-					keys: {
-						value: ["available_bikes"],
-						
+		chartBtn2.onclick = function(){
+//			$.getJSON(localAddress+"chart/"+ChartStationNum, function(externaldata){
+//				
+//				dataMon = Object.values(externaldata.mon);
+//				dataTue = Object.values(externaldata.tue);
+//				dataWed = Object.values(externaldata.wed);
+//				dataThu = Object.values(externaldata.thu);
+//				dataFri = Object.values(externaldata.fri);
+//				dataSat = Object.values(externaldata.sat);
+//				dataSun = Object.values(externaldata.sun);
+				
+				chart = c3.generate({
+					title:{
+						text:"Bike availability for " + ChartStationAddress
 					},
+					bindto: "#chart",
+					data:{
+						json:{
+							Monday: dataMon,
+							Tuesday: dataTue,
+							Wednesday: dataWed,
+							Thursday: dataThu,
+							Friday: dataFri,
+							Saturday: dataSat,
+							Sunday: dataSun
+						},
+						type: 'spline'
+					},
+					point: {
+				        show: false
+						},
+					zoom: {
+						enabled: true
+//					}
 				}
-			})
-		});
-}
-	
-}
-
+//						)
+			});
+	}}
 
 function showWeather(){
 	var x = document.getElementById("weather")
@@ -156,6 +196,3 @@ function showWeather(){
 			};
 		});
 }
-
-	
-

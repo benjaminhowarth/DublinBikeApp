@@ -60,13 +60,13 @@ def chart(station_number):
     sat = df.loc[df.weekday =='Saturday'][['available_bikes', 'last_update']]
     sun = df.loc[df.weekday =='Sunday'][['available_bikes', 'last_update']]
     
-    mon_av = pd.DataFrame(mon.groupby(mon.last_update.dt.hour).mean())
-    tue_av = pd.DataFrame(tue.groupby(tue.last_update.dt.hour).mean())
-    wed_av = pd.DataFrame(wed.groupby(wed.last_update.dt.hour).mean())
-    thu_av = pd.DataFrame(thu.groupby(thu.last_update.dt.hour).mean())
-    fri_av = pd.DataFrame(fri.groupby(fri.last_update.dt.hour).mean())
-    sat_av = pd.DataFrame(sat.groupby(sat.last_update.dt.hour).mean())
-    sun_av = pd.DataFrame(sun.groupby(sun.last_update.dt.hour).mean())
+    mon_av = pd.DataFrame(mon.groupby(mon.last_update.dt.hour).mean().round())
+    tue_av = pd.DataFrame(tue.groupby(tue.last_update.dt.hour).mean().round())
+    wed_av = pd.DataFrame(wed.groupby(wed.last_update.dt.hour).mean().round())
+    thu_av = pd.DataFrame(thu.groupby(thu.last_update.dt.hour).mean().round())
+    fri_av = pd.DataFrame(fri.groupby(fri.last_update.dt.hour).mean().round())
+    sat_av = pd.DataFrame(sat.groupby(sat.last_update.dt.hour).mean().round())
+    sun_av = pd.DataFrame(sun.groupby(sun.last_update.dt.hour).mean().round())
     
     mon_av.reset_index(drop=True, inplace=True)
     tue_av.reset_index(drop=True, inplace=True)
@@ -75,6 +75,9 @@ def chart(station_number):
     fri_av.reset_index(drop=True, inplace=True)
     sat_av.reset_index(drop=True, inplace=True)
     sun_av.reset_index(drop=True, inplace=True)
+    
+    
+    
     
     df = pd.concat([mon_av, tue_av, wed_av, thu_av, fri_av, sat_av, sun_av], axis=1)
     df.columns = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
