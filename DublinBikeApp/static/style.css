@@ -205,6 +205,8 @@ button {
 }
 
 #startUpMessage {
+	alignment: center;
+	width: 100%;
 	text-align: center;
 	font-weight: bold;
 	font-family: 'Roboto';

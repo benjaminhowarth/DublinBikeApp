@@ -14,7 +14,7 @@ function openSidebar(){
 function closeSidebar() {
 //	$('#toggle').html("&gt;&gt;&gt;")
 	$('aside').removeClass('open');
-	$('#mapHeader').fadeIn()
+	$('#mapHeader').fadeIn();
 	sidebar = false;
 }
 
@@ -65,7 +65,7 @@ function initMap() {
 	        "elementType": "geometry.fill",
 	        "stylers": [
 	            {"visibility": "on"},
-	            {"hue": "#1900ff"},
+	            {"hue": "#1100ff"},
 	            {"color": "#c0e8e8"}
 	        ]
 	    },
@@ -137,8 +137,14 @@ function initMap() {
 				dataSat = Object.values(externaldata.sat);
 				dataSun = Object.values(externaldata.sun);
 				// Find a way to trigger button2 when these values are finished updating. 
-			})
-			
+				dataMon.unshift("Monday");
+				dataTue.unshift("Tuesday");
+				dataWed.unshift("Wednesday");
+				dataThu.unshift("Thursday");
+				dataFri.unshift("Friday");
+				dataSat.unshift("Saturday");
+				dataSun.unshift("Sunday");
+			})	
 		});
 	}
 
@@ -168,64 +174,61 @@ function initChart() {
 	var chartBtn2 = document.getElementById("chartBtn2");
 
 	var chart = c3.generate({
-		bindto: '#chart',
-		data: {
-			columns:[
-				['data1', 100, 400, 100, 300, 150],
-				['data2', 50, 20, 40, 400, 50]
-			]
-		}
-	});
+		title:{
+			text:"Bike availability"
+		},
+		bindto: "#chart",
+		data:{
+			json:{
+				Monday: [0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10,0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10],
+				Tuesday: [20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0],
+				Wednesday: [0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20],
+				Thursday: [30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0],
+				Friday: [0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30,0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30],
+				Saturday: [40,0,40,0, 40, 0, 40,0,40,0, 40, 0,40,0,40,0, 40, 0, 40,0,40,0, 40, 0],
+				Sunday: [0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40,0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40]
+			},
+			type: 'spline'
+		},
+		point: {
+	        show: false
+			},
+		zoom: {
+			enabled: true
+	}
+});
 	
 	//change the data displayed on the chart with onclick events
 	chartBtn1.onclick = function(){
 		chart.load({
+			unload: true,
 			columns: [
-				['data1', 300, 100, 750, 200, 400],
-				['data2', 100, 400, 50, 300, 650],
-				['data3', 450, 150, 200, 400, 100]
+				["Monday", 0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10,0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10],
+				["Tuesday", 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0],
+				["Wednesday", 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20],
+				["Thursday", 30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0],
+				["Friday", 0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30,0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30],
+				["Saturday", 40,0,40,0, 40, 0, 40,0,40,0, 40, 0,40,0,40,0, 40, 0, 40,0,40,0, 40, 0],
+				["Sunday", 0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40,0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40]
+				
 			], unload: ['data1', 'data2' , 'data3'], 
 		});
 	}
-
-		chartBtn2.onclick = function(){
-//			$.getJSON(localAddress+"chart/"+ChartStationNum, function(externaldata){
-//				
-//				dataMon = Object.values(externaldata.mon);
-//				dataTue = Object.values(externaldata.tue);
-//				dataWed = Object.values(externaldata.wed);
-//				dataThu = Object.values(externaldata.thu);
-//				dataFri = Object.values(externaldata.fri);
-//				dataSat = Object.values(externaldata.sat);
-//				dataSun = Object.values(externaldata.sun);
-				
-				chart = c3.generate({
-					title:{
-						text:"Bike availability for " + ChartStationAddress
-					},
-					bindto: "#chart",
-					data:{
-						json:{
-							Monday: dataMon,
-							Tuesday: dataTue,
-							Wednesday: dataWed,
-							Thursday: dataThu,
-							Friday: dataFri,
-							Saturday: dataSat,
-							Sunday: dataSun
-						},
-						type: 'spline'
-					},
-					point: {
-				        show: false
-						},
-					zoom: {
-						enabled: true
-//					}
-				}
-//						)
-			});
-	}}
+	
+	chartBtn2.onclick = function(){
+		chart.load({
+				columns:[
+					dataMon,
+					dataTue,
+					dataWed,
+					dataThu,
+					dataFri,
+					dataSat,
+					dataSun
+				]
+		});
+	}	
+}
 
 function showWeather(){
 	var x = document.getElementById("weather")
