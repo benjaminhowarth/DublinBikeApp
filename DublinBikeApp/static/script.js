@@ -6,6 +6,7 @@ function openSidebar(){
 	$('aside').addClass('open');
 	$('#toggleOpen').css("display", "none");
 	$('#mapHeader').fadeOut()
+	$('#startUpMessage').css("display", "none");
 	sidebar = true;
 }
 
