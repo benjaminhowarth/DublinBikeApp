@@ -71,6 +71,12 @@ function initMap() {
 	            {"visibility": "off"}
 	        ]
 	    },
+	    {"featureType": "transit",
+	        "elementType": "labels.icon",
+	        "stylers": [
+	            {"visibility": "off"}
+	        ]
+	    },
 	    {"featureType": "transit.line",
 	        "elementType": "geometry",
 	        "stylers": [

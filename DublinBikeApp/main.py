@@ -52,6 +52,8 @@ def chart(station_number):
     df = pd.read_sql(sql, engine)
     df['last_update'] =  pd.to_datetime((df['last_update']//1000), unit='s')
     df['weekday'] = df['last_update'].dt.weekday_name
+    df['dayofyear'] = df['last_update'].dt.dayofyear
+    df['hour']=df['last_update'].dt.hour
     
     mon = df.loc[df.weekday =='Monday'][['available_bikes', 'last_update']]
     tue = df.loc[df.weekday =='Tuesday'][['available_bikes', 'last_update']]
@@ -60,7 +62,7 @@ def chart(station_number):
     fri = df.loc[df.weekday =='Friday'][['available_bikes', 'last_update']]
     sat = df.loc[df.weekday =='Saturday'][['available_bikes', 'last_update']]
     sun = df.loc[df.weekday =='Sunday'][['available_bikes', 'last_update']]
-    
+     
     mon_av = pd.DataFrame(mon.groupby(mon.last_update.dt.hour).mean().round())
     tue_av = pd.DataFrame(tue.groupby(tue.last_update.dt.hour).mean().round())
     wed_av = pd.DataFrame(wed.groupby(wed.last_update.dt.hour).mean().round())
@@ -68,7 +70,7 @@ def chart(station_number):
     fri_av = pd.DataFrame(fri.groupby(fri.last_update.dt.hour).mean().round())
     sat_av = pd.DataFrame(sat.groupby(sat.last_update.dt.hour).mean().round())
     sun_av = pd.DataFrame(sun.groupby(sun.last_update.dt.hour).mean().round())
-    
+     
     mon_av.reset_index(drop=True, inplace=True)
     tue_av.reset_index(drop=True, inplace=True)
     wed_av.reset_index(drop=True, inplace=True)
@@ -76,10 +78,10 @@ def chart(station_number):
     fri_av.reset_index(drop=True, inplace=True)
     sat_av.reset_index(drop=True, inplace=True)
     sun_av.reset_index(drop=True, inplace=True)
-    
-    
-    
-    
+     
+     
+     
+     
     df = pd.concat([mon_av, tue_av, wed_av, thu_av, fri_av, sat_av, sun_av], axis=1)
     df.columns = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
     
@@ -109,10 +111,15 @@ def weather():
 def pastWeather():
     engine=get_db()
     pastWeatherList=[]
-    pastWeather =engine.execute("SELECT * FROM dublinbikedb.weather")
-    for row in pastWeather:
-        pastWeatherList.append(dict(row))
-    return jsonify(pastWeatherList=pastWeatherList)
+    weathersql = """
+    SELECT * FROM dublinbikedb.weather
+    """
+    df2 = pd.read_sql(weathersql, engine)
+    df2['time'] =  pd.to_datetime((df2['time']), unit='s')
+    df2['weekday'] = df2['time'].dt.weekday_name
+    df2['dayofyear'] = df2['time'].dt.dayofyear
+    df2['hour'] = df2['time'].dt.hour
+    return df2.to_json()
 
 @app.route('/')
 @functools.lru_cache(maxsize=128)
