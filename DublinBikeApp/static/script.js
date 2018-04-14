@@ -133,7 +133,7 @@ function initMap() {
 }
 
 $(document).ready(function(){
-	$('#startUpMessage').fadeIn(3000).delay(3000).fadeOut(2000);
+	$('#startUpMessage').delay(3000).fadeOut(2000);
 });
 
 function initChart(ChartStationNum, ChartStationAddress) {
@@ -187,7 +187,6 @@ function initChart(ChartStationNum, ChartStationAddress) {
 	
 	chartBtn1.onclick = function(){
 		chart.load({
-			unload: true,
 			columns:[
 				['Monday'].concat(dataMon),
 				['Tuesday'].concat(dataTue),
@@ -202,7 +201,6 @@ function initChart(ChartStationNum, ChartStationAddress) {
 	
 	chartBtn2.onclick = function(){
 		chart.load({
-			unload: true,
 			columns: [
 				["Monday", 0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10,0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10],
 				["Tuesday", 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0],
@@ -233,7 +231,7 @@ function showWeather(){
 				var weatherTime = string.slice(11, 16);
 				weatherDiv.innerHTML += '<div><div>'+
 					'<img title="'+weather[i].description+'"'+
-					'class="icon" src=http://openweathermap.org/img/w/'+weather[i].icon+'.png>'+
+					'class="icon" src="../static/icons/'+weather[i].icon+'.png">'+
 					'</div>'+weatherTime+'<div>'
 			};
 		};

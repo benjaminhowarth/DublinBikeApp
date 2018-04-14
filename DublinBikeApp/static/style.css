@@ -149,10 +149,6 @@ article {
 	lign-items: center;
 }
 
-button {
-	padding: 1px;
-}
-
 #chart-loading-div {
 	display: flex;
 	align-items: center;
@@ -169,7 +165,7 @@ button {
 #chart {
 	display: flex;
 	align-items: center;
-	width: 100%;
+	width: 95%;
 	height: 100%;
 }
 
