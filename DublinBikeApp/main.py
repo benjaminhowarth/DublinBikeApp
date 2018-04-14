@@ -122,7 +122,7 @@ def pastWeather():
     return df2.to_json()
 
 @app.route('/')
-@functools.lru_cache(maxsize=128)
+#@functools.lru_cache(maxsize=128)
 def index():
     return render_template('index.html')
 
