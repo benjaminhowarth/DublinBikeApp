@@ -96,8 +96,18 @@ function initMap() {
                 lat : station.position_lat,
                 lng : station.position_lng
             },
+            label: ""+station.available_bikes,
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 5 + station.bike_stands/1.8,
+                strokeWeight: 0,
+                fillColor: 'red',
+                fillOpacity:.2 + (station.available_bikes/station.bike_stands)/2
+                },
+                
 			map: map,
-			icon: icon
+			
+			
 		});
 
 
@@ -109,11 +119,11 @@ function initMap() {
 			openSidebar();
 
 			infoWindow = new google.maps.InfoWindow({
-				content: '<a href="./chart/'+station.number+'">'+station.number+'</a>'+
-							'<h3>'+station.address+'</h3>'+
-							'<h4>Bike Stands = '+station.bike_stands+'</h4>'+
-							'<h4>Available Bikes = '+station.available_bikes+'</h4>'+
-							'<h4>Available Bike Stands = '+station.available_bike_stands+'</h4>'
+				content: 
+						'<h3>'+station.address+'</h3>'+
+						'<h4>Bike Stands = '+station.bike_stands+'</h4>'+
+						'<h4>Available Bikes = '+station.available_bikes+'</h4>'+
+						'<h4>Available Bike Stands = '+station.available_bike_stands+'</h4>'
 			});
 
 			infoWindow.open(map, marker);
@@ -143,6 +153,10 @@ $(document).ready(function(){
 	$('#startUpMessage').delay(3000).fadeOut(2000);
 });
 
+
+
+
+var chartGenerated = false;
 function initChart(ChartStationNum, ChartStationAddress) {
 //	document.getElementById("chart-loading-div").style.display = 'flex';
 //	document.getElementById("chart").style.display = 'none'
@@ -158,38 +172,57 @@ function initChart(ChartStationNum, ChartStationAddress) {
 		dataSat = Object.values(externaldata.sat);
 		dataSun = Object.values(externaldata.sun);
 		
-		chart = c3.generate({
-			title: {
-				text:"Available Bikes at " + ChartStationAddress
-			},
-			bindto: document.getElementById("chart"),
-			data: {
-				json: {
-					Monday: dataMon,
-					Tuesday: dataTue,
-					Wednesday: dataWed,
-					Thursday: dataThu,
-					Friday: dataFri,
-					Saturday: dataSat,
-					Sunday: dataSun
+		if (chartGenerated == true){
+			
+		
+			chart.load({
+				columns:[
+					['Monday'].concat(dataMon),
+					['Tuesday'].concat(dataTue),
+					['Wednesday'].concat(dataWed),
+					['Thursday'].concat(dataThu),
+					['Friday'].concat(dataFri),
+					['Saturday'].concat(dataSat),
+					['Sunday'].concat(dataSun)
+				]
+			});
+		}
+		else{
+			chart = c3.generate({
+				title: {
+					text:"Available Bikes at " + ChartStationAddress
 				},
-				type: 'spline'
-			},
-			axis: {
-				x: {
-					label: 'Hours'
+				bindto: document.getElementById("chart"),
+				data: {
+					json: {
+						Monday: dataMon,
+						Tuesday: dataTue,
+						Wednesday: dataWed,
+						Thursday: dataThu,
+						Friday: dataFri,
+						Saturday: dataSat,
+						Sunday: dataSun
+					},
+					type: 'spline'
 				},
-				y: {
-					label: 'Average Available Bikes'
+				axis: {
+					x: {
+						label: 'Hours'
+					},
+					y: {
+						label: 'Average Available Bikes'
+					}
+				},
+				point: {
+					show: false
+				},
+				zoom: {
+					enabled: true
 				}
-			},
-			point: {
-				show: false
-			},
-			zoom: {
-				enabled: true
-			}
-		});
+			});
+			chartGenerated = true;
+		}
+
 	})
 	
 	chartBtn1.onclick = function(){
