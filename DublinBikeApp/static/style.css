@@ -170,6 +170,15 @@ article {
 	height: 100%;
 }
 
+#stationChartTitle {
+	font-family: Roboto;
+	width: 80%;
+	text-align: center;
+	margin: 0 auto;
+	margin-bottom: 5px;
+}
+
+
 .labels {
      color: red;
      background-color: white;
@@ -181,3 +190,57 @@ article {
      border: 2px solid black;
      white-space: nowrap;
    }
+
+  .pac-card {
+        margin: 10px 10px 0 0;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        background-color: #fff;
+        font-family: Roboto;
+      }
+
+      #pac-container {
+        padding-bottom: 12px;
+        margin-right: 12px;
+        text-align: center;
+        align-self: center;
+      }
+
+      .pac-controls {
+        display: inline-block;
+        padding: 5px 11px;
+        width: 100%;
+      }
+
+      .pac-controls label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+
+      #searchBar {
+        background-color: rgba(255,0,0,0.4) ;
+        color: white;
+        font-family: Roboto;
+        font-size: 15px;
+        font-weight: 300;
+        padding: 0 11px 0 13px;
+        text-overflow: ellipsis;
+        width: 200px;
+        margin-top: 50px;
+        outline: none;
+        border: none;
+      }
+
+      #searchBar:focus {
+        border-color: #4d90fe;
+      }
+      
+      ::placeholder {
+    			color: white;
+    			font-family: roboto;
+    			
+      }

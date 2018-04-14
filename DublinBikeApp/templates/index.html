@@ -15,6 +15,7 @@
 	<script src="{{ url_for('static', filename='c3-master/c3.min.js') }}" charset="utf-8"></script>
 	
 	
+	
 </head>
 <body onload='showWeather()'>
 	<header id="mapHeader">DUBLIN BIKE PLANNER</header>
@@ -35,17 +36,23 @@
 				<div id='chart-loading-div'>
 					<img id="chart-loading-image" src="static/loading.gif" alt="loading...">
 				</div>
+				<div><h5 id="stationChartTitle"></h5></div>
 				<div id="chart"></div>	
 			</article>
 		</aside>
 		<div id="mapContainer">
+			<input id="searchBar" class="controls" type="text" placeholder="Search" onfocus="if(this.value != '') {this.value=''}" onblur="if(this.value == ''){this.value ='Search'}">
 			<button id="toggle">&gt;&gt;&gt;</button>
 			<div id='startUpMessage'>Click on a station to view its occupancy information</div>
 			<div id='map'></div>		
+			
 		</div>
 		<script async defer 
-			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA&callback=initMap">
+			src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyD4RRQ0Y1lMgihqDFu1wVw1wPsb4bVtCmA&callback=initMap">
 		</script>
+		<!-- <script>
+			src="http://maps.google.com/maps/api/js?libraries=places&sensor=false"></script>
+		</script> -->
 	</main>
 
 </body>
