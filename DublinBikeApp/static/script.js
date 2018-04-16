@@ -16,7 +16,6 @@ function closeSidebar() {
 	$('aside').removeClass('open');
 	$('#mapHeader').fadeIn()
 	$('#searchBar').fadeIn();
-	$('#searchBar').css("display", "block");
 	sidebar = false;
 }
 
@@ -35,7 +34,6 @@ function initMap() {
 	var dublin = {lat: 53.3484906, lng: -6.2551201};
 	var infoWindow;
 	var icon='http://icons.iconarchive.com/icons/elegantthemes/beautiful-flat-one-color/32/bike-icon.png';
-
 	// Create Map
 	var map = new google.maps.Map(document.getElementById('map'), {
 	zoom: 14,
@@ -72,9 +70,36 @@ function initMap() {
 	    {"featureType": "road",
 	        "elementType": "labels",
 	        "stylers": [
-	            {"visibility": "off"}
+	            {"visibility": "simplified"}
 	        ]
 	    },
+	    
+	    {"featureType": "road.highway",
+	        "elementType": "labels",
+	        "stylers": [
+	            {"visibility": "off"}
+	            ]
+	    },
+	    
+	    {
+	        "featureType": "road.highway.controlled_access",
+	        "stylers": [
+	          {
+	            "visibility": "off"
+	          }
+	        ]
+	      },
+	    
+	    {
+	        "featureType": "road.arterial",
+	        "stylers": [
+	          {
+	            "visibility": "off"
+	          }
+	        ]
+	      },
+	    
+	    
 	    {"featureType": "transit",
 	        "elementType": "labels.icon",
 	        "stylers": [
@@ -106,23 +131,18 @@ function initMap() {
                 strokeWeight: 0,
                 fillColor: 'red',
                 fillOpacity:.2 + (station.available_bikes/station.bike_stands)/2
-                },
-                
-			map: map,
-					
+                },     
+			map: map,		
 		});
-
+		
 		marker.addListener('click', function(){
 			if(infoWindow) {
 				infoWindow.close();				
 			}
-			
 			openSidebar();
-
 			infoWindow = new google.maps.InfoWindow({
 				content: 
 						'<h3>'+station.address+'</h3>'+
-						'<h4>Bike Stands = '+station.bike_stands+'</h4>'+
 						'<h4>Available Bikes = '+station.available_bikes+'</h4>'+
 						'<h4>Available Bike Stands = '+station.available_bike_stands+'</h4>'
 			});
@@ -160,15 +180,6 @@ function initMap() {
 	  var searchBox = new google.maps.places.SearchBox(input);
 	  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-	  //Need to figure out how to do this. Must set bounds
-	  // Bias the SearchBox results towards current map's viewport.
-//	  map.addListener('bounds_changed', function() {
-//	    searchBox.setBounds(map.getBounds());
-//	  });
-
-	  var markers = [];
-	  // Listen for the event fired when the user selects a prediction and retrieve
-	  // more details for that place.
 	  searchBox.addListener('places_changed', function() {
 	    var places = searchBox.getPlaces();
 
@@ -192,7 +203,11 @@ function initMap() {
 	      }
 	    });
 	    map.fitBounds(bounds);
-	  });	
+	  });
+	  
+	  map.addListener('bounds_changed', function() {
+		    searchBox.setBounds(map.getBounds());
+		  });
 }
 
 $(document).ready(function(){
@@ -216,8 +231,6 @@ function initChart(ChartStationNum, ChartStationAddress) {
 		dataSun = Object.values(externaldata.sun);
 		
 		if (chartGenerated == true){
-			
-		
 			chart.load({
 				columns:[
 					['Monday'].concat(dataMon),
@@ -265,7 +278,6 @@ function initChart(ChartStationNum, ChartStationAddress) {
 			document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
 			chartGenerated = true;
 		}
-
 	})
 	
 	chartBtn1.onclick = function(){

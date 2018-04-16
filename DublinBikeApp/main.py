@@ -6,6 +6,8 @@ import json
 import sqlite3
 import functools
 import pandas as pd
+import time
+import sys
 
 app = Flask(__name__)
 
@@ -37,6 +39,7 @@ def close_connection(exception):
 @app.route("/chartData/<int:station_number>")
 @functools.lru_cache(maxsize=128)
 def chartData(station_number):
+    
     engine = get_db()
 #     chartData = []
 #    rows = engine.execute("SELECT available_bikes, bike_stands, DAYNAME(FROM_UNIXTIME(last_update/1000)) as Day, CONCAT(HOUR(FROM_UNIXTIME(last_update/1000)),':', MINUTE(FROM_UNIXTIME(last_update/1000))) as Time FROM dublinbikedb.static JOIN dublinbikedb.dynamic ON dublinbikedb.static.number = dublinbikedb.dynamic.number where dublinbikedb.static.number = '{}'".format(station_number))
@@ -58,7 +61,9 @@ def chartData(station_number):
 @app.route("/chart/<int:station_number>")
 @functools.lru_cache(maxsize=128)
 def chart(station_number):
+   
     engine = get_db()
+    
 #     chartData = []
 #    rows = engine.execute("SELECT available_bikes, bike_stands, DAYNAME(FROM_UNIXTIME(last_update/1000)) as Day, CONCAT(HOUR(FROM_UNIXTIME(last_update/1000)),':', MINUTE(FROM_UNIXTIME(last_update/1000))) as Time FROM dublinbikedb.static JOIN dublinbikedb.dynamic ON dublinbikedb.static.number = dublinbikedb.dynamic.number where dublinbikedb.static.number = '{}'".format(station_number))
     sql = """
@@ -68,13 +73,19 @@ def chart(station_number):
     WHERE dublinbikedb.static.number = '{}'
     """.format(station_number)
     
+    print("Start", file=sys.stderr)
+    t0 = time.time()
     df = pd.read_sql(sql, engine)
+    t1 = time.time()
+    print(t1-t0, file=sys.stderr)
+    
     df['last_update'] =  pd.to_datetime((df['last_update']//1000), unit='s')
     df['weekday'] = df['last_update'].dt.weekday_name
     df['dayofyear'] = df['last_update'].dt.dayofyear
     df['hour']=df['last_update'].dt.hour
-
     
+    
+   
     mon = df.loc[df.weekday =='Monday'][['available_bikes', 'last_update']]
     tue = df.loc[df.weekday =='Tuesday'][['available_bikes', 'last_update']]
     wed = df.loc[df.weekday =='Wednesday'][['available_bikes', 'last_update']]
@@ -104,7 +115,8 @@ def chart(station_number):
       
     df = pd.concat([mon_av, tue_av, wed_av, thu_av, fri_av, sat_av, sun_av], axis=1)
     df.columns = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
-        
+    
+     
     return df.to_json()
 
 @app.route("/stations")
