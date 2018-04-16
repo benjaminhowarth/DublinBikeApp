@@ -58,66 +58,30 @@ def chartData(station_number):
     return df.to_json() 
 
 
-@app.route("/chart/<int:station_number>")
+@app.route("/chart/")
 @functools.lru_cache(maxsize=128)
-def chart(station_number):
-   
+def chart():
     engine = get_db()
-    
-#     chartData = []
-#    rows = engine.execute("SELECT available_bikes, bike_stands, DAYNAME(FROM_UNIXTIME(last_update/1000)) as Day, CONCAT(HOUR(FROM_UNIXTIME(last_update/1000)),':', MINUTE(FROM_UNIXTIME(last_update/1000))) as Time FROM dublinbikedb.static JOIN dublinbikedb.dynamic ON dublinbikedb.static.number = dublinbikedb.dynamic.number where dublinbikedb.static.number = '{}'".format(station_number))
     sql = """
-    SELECT available_bikes, last_update
+    SELECT dublinbikedb.static.number, available_bikes, last_update
     FROM dublinbikedb.static 
     JOIN dublinbikedb.dynamic ON dublinbikedb.static.number = dublinbikedb.dynamic.number 
-    WHERE dublinbikedb.static.number = '{}'
-    """.format(station_number)
+    """
     
-    print("Start", file=sys.stderr)
-    t0 = time.time()
     df = pd.read_sql(sql, engine)
-    t1 = time.time()
-    print(t1-t0, file=sys.stderr)
-    
     df['last_update'] =  pd.to_datetime((df['last_update']//1000), unit='s')
-    df['weekday'] = df['last_update'].dt.weekday_name
-    df['dayofyear'] = df['last_update'].dt.dayofyear
-    df['hour']=df['last_update'].dt.hour
+    df.set_index(df["last_update"],inplace=True, drop=True)
+    group = pd.DataFrame(df.groupby([df.number, df.index.dayofweek, df.index.hour]).mean().unstack(level=1))
+    group.columns.set_levels(["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],level=1,inplace=True)
     
+    groupJson = {}
     
-   
-    mon = df.loc[df.weekday =='Monday'][['available_bikes', 'last_update']]
-    tue = df.loc[df.weekday =='Tuesday'][['available_bikes', 'last_update']]
-    wed = df.loc[df.weekday =='Wednesday'][['available_bikes', 'last_update']]
-    thu = df.loc[df.weekday =='Thursday'][['available_bikes', 'last_update']]
-    fri = df.loc[df.weekday =='Friday'][['available_bikes', 'last_update']]
-    sat = df.loc[df.weekday =='Saturday'][['available_bikes', 'last_update']]
-    sun = df.loc[df.weekday =='Sunday'][['available_bikes', 'last_update']]
-      
-    mon_av = pd.DataFrame(mon.groupby(mon.last_update.dt.hour).mean().round())
-    tue_av = pd.DataFrame(tue.groupby(tue.last_update.dt.hour).mean().round())
-    wed_av = pd.DataFrame(wed.groupby(wed.last_update.dt.hour).mean().round())
-    thu_av = pd.DataFrame(thu.groupby(thu.last_update.dt.hour).mean().round())
-    fri_av = pd.DataFrame(fri.groupby(fri.last_update.dt.hour).mean().round())
-    sat_av = pd.DataFrame(sat.groupby(sat.last_update.dt.hour).mean().round())
-    sun_av = pd.DataFrame(sun.groupby(sun.last_update.dt.hour).mean().round())
-      
-    mon_av.reset_index(drop=True, inplace=True)
-    tue_av.reset_index(drop=True, inplace=True)
-    wed_av.reset_index(drop=True, inplace=True)
-    thu_av.reset_index(drop=True, inplace=True)
-    fri_av.reset_index(drop=True, inplace=True)
-    sat_av.reset_index(drop=True, inplace=True)
-    sun_av.reset_index(drop=True, inplace=True)
-      
-      
-      
-      
-    df = pd.concat([mon_av, tue_av, wed_av, thu_av, fri_av, sat_av, sun_av], axis=1)
-    df.columns = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+    for number, new_df in group.groupby(level=0):
+        groupJson[str(number)] = {}
+        for day in group['available_bikes'].columns:
+            groupJson[str(number)][str(day)] = new_df['available_bikes'][day].reset_index(drop=True).tolist() 
     
-     
-    return df.to_json()
+    return json.dumps(groupJson)
 
 @app.route("/stations")
 @functools.lru_cache(maxsize=128)

@@ -30,6 +30,10 @@ $(document).ready(function(){
 	});
 });
 
+$(document).ready(function(){
+	$('#startUpMessage').delay(3000).fadeOut(2000);
+});
+
 function initMap() {
 	var dublin = {lat: 53.3484906, lng: -6.2551201};
 	var infoWindow;
@@ -174,111 +178,117 @@ function initMap() {
 		document.getElementById("searchBar").blur();
 	});
 	
-// Creating a search bar
-// From: https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
-	  var input = document.getElementById('searchBar');
-	  var searchBox = new google.maps.places.SearchBox(input);
-	  map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+	// Creating a search bar
+	// From: https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
+	var input = document.getElementById('searchBar');
+	var searchBox = new google.maps.places.SearchBox(input);
+	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-	  searchBox.addListener('places_changed', function() {
-	    var places = searchBox.getPlaces();
-
-	    if (places.length == 0) {
-	      return;
-	    }
-
-	    // For each place, get the icon, name and location.
-	    var bounds = new google.maps.LatLngBounds();
-	    places.forEach(function(place) {
-	      if (!place.geometry) {
-	        console.log("Returned place contains no geometry");
-	        return;
-	      }
-	      	   
-	      if (place.geometry.viewport) {
-	        // Only geocodes have viewport.
-	        bounds.union(place.geometry.viewport);
-	      } else {
-	        bounds.extend(place.geometry.location);
-	      }
-	    });
-	    map.fitBounds(bounds);
-	  });
-	  
-	  map.addListener('bounds_changed', function() {
-		    searchBox.setBounds(map.getBounds());
-		  });
+	searchBox.addListener('places_changed', function() {
+		var places = searchBox.getPlaces();
+		
+		if (places.length == 0) {
+		  return;
+		}
+		
+		// For each place, get the icon, name and location.
+		var bounds = new google.maps.LatLngBounds();
+		places.forEach(function(place) {
+			if (!place.geometry) {
+				console.log("Returned place contains no geometry");
+				return;
+			}
+		   
+			if (place.geometry.viewport) {
+				// Only geocodes have viewport.
+				bounds.union(place.geometry.viewport);
+			} else {
+				bounds.extend(place.geometry.location);
+			}
+		});
+		map.fitBounds(bounds);
+  });
+  
+  map.addListener('bounds_changed', function() {
+	  searchBox.setBounds(map.getBounds());
+  }); 
 }
 
-$(document).ready(function(){
-	$('#startUpMessage').delay(3000).fadeOut(2000);
-});
-
 var chartGenerated = false;
+var chartJson;
+
+function loadChartData() {
+	$.getJSON(localAddress+"chart/", function(json) {
+		chartJson = json;
+	});
+}
+
 function initChart(ChartStationNum, ChartStationAddress) {
-//	document.getElementById("chart-loading-div").style.display = 'flex';
-//	document.getElementById("chart").style.display = 'none'
+	document.getElementById("chart-loading-div").style.display = 'flex';
 	document.getElementById("buttonDiv").style.display = 'flex'
+		
+	if (typeof chartJson == "undefined") {
+		console.log(chartJson);
+		return
+	}
+		
+	var data = chartJson[ChartStationNum];
+
+	var dataMon = data['Monday'];
+	var dataTue = data['Tuesday'];
+	var dataWed = data['Wednesday'];
+	var dataThu = data['Thursday'];
+	var dataFri = data['Friday'];
+	var dataSat = data['Saturday'];
+	var dataSun = data['Sunday'];
 	
-	$.getJSON(localAddress+"chart/"+ChartStationNum, function(externaldata){
-		
-		dataMon = Object.values(externaldata.mon);
-		dataTue = Object.values(externaldata.tue);
-		dataWed = Object.values(externaldata.wed);
-		dataThu = Object.values(externaldata.thu);
-		dataFri = Object.values(externaldata.fri);
-		dataSat = Object.values(externaldata.sat);
-		dataSun = Object.values(externaldata.sun);
-		
-		if (chartGenerated == true){
-			chart.load({
-				columns:[
-					['Monday'].concat(dataMon),
-					['Tuesday'].concat(dataTue),
-					['Wednesday'].concat(dataWed),
-					['Thursday'].concat(dataThu),
-					['Friday'].concat(dataFri),
-					['Saturday'].concat(dataSat),
-					['Sunday'].concat(dataSun)
-				]
-			});
-			document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
-		}
-		else{
-			chart = c3.generate({
-				
-				bindto: document.getElementById("chart"),
-				data: {
-					json: {
-						Monday: dataMon,
-						Tuesday: dataTue,
-						Wednesday: dataWed,
-						Thursday: dataThu,
-						Friday: dataFri,
-						Saturday: dataSat,
-						Sunday: dataSun
-					},
-					type: 'spline'
+	if (chartGenerated == true){
+		chart.load({
+			columns:[
+				['Monday'].concat(dataMon),
+				['Tuesday'].concat(dataTue),
+				['Wednesday'].concat(dataWed),
+				['Thursday'].concat(dataThu),
+				['Friday'].concat(dataFri),
+				['Saturday'].concat(dataSat),
+				['Sunday'].concat(dataSun)
+			]
+		});
+		document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
+	}
+	else{
+		chart = c3.generate({
+			bindto: document.getElementById("chart"),
+			data: {
+				json: {
+					Monday: dataMon,
+					Tuesday: dataTue,
+					Wednesday: dataWed,
+					Thursday: dataThu,
+					Friday: dataFri,
+					Saturday: dataSat,
+					Sunday: dataSun
 				},
-				axis: {
-					x: {
-						label: 'Hours'
-					},
-					y: {
-						label: 'Average Available Bikes'
-					}
+				type: 'spline'
+			},
+			axis: {
+				x: {
+					label: 'Hours'
 				},
-				point: {
-					show: false
-				},
-				zoom: {
-					enabled: true
+				y: {
+					label: 'Average Available Bikes'
 				}
-			});
-			document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
-			chartGenerated = true;
-		}
-	})
+			},
+			point: {
+				show: false
+			},
+			zoom: {
+				enabled: true
+			}
+		});
+		document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
+		chartGenerated = true;
+	}
 	
 	chartBtn1.onclick = function(){
 		chart.load({
@@ -312,29 +322,25 @@ function initChart(ChartStationNum, ChartStationAddress) {
 		});
 	}
 	
-//	document.getElementById("chart-loading-div").style.display = 'none';
-//	document.getElementById("chart").style.display = 'flex'
+	document.getElementById("chart-loading-div").style.display = 'none';
 }
 
 function showWeather(){	
-	document.getElementById("weather-loading-div").style.display = 'flex';
-	document.getElementById("weather").style.display = 'none'
-	
 	var weatherDiv = document.getElementById("weather")
 	$.getJSON(localAddress+"/weather", null, function(results) {
 		if ('weatherlist' in results) {
 			var weather = results.weatherlist;
+			var weatherHTML = "";
 			for (var i=0; i < 5; i++){
 				var string =weather[i].dt_txt;
 				var weatherTime = string.slice(11, 16);
-				weatherDiv.innerHTML += '<div><div>'+
+				weatherHTML += '<div><div>'+
 					'<img title="'+weather[i].description+'"'+
 					'class="icon" src="../static/icons/'+weather[i].icon+'.png">'+
-					'</div>'+weatherTime+'<div>'
+					'</div>'+weatherTime+'</div>';
 			};
+			weatherDiv.innerHTML = "";
+			weatherDiv.innerHTML = weatherHTML;
 		};
 	});
-	
-	document.getElementById("weather-loading-div").style.display = 'none';
-	document.getElementById("weather").style.display = 'flex'
 }
