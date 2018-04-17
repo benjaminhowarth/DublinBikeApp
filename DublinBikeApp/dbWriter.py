@@ -62,26 +62,10 @@ def createDynamicTable():
         engine.execute(sql)
     except Exception as e:
         print(e)
-
-def createLatestDynamicTable():
-    sql = """
-    CREATE TABLE IF NOT EXISTS latestDynamic (
-    number INTEGER,
-    status VARCHAR(256),
-    bike_stands INTEGER,
-    available_bike_stands INTEGER,
-    available_bikes INTEGER,
-    last_update BIGINT
-    )
-    """
-    try:
-        engine.execute(sql)
-    except Exception as e:
-        print(e)
         
-def createNewLatestDynamicTable():
+def createStationInformation():
     sql = """
-    CREATE TABLE IF NOT EXISTS newLatestDynamic (
+    CREATE TABLE IF NOT EXISTS stationInformation (
     number INTEGER NOT NULL,
     contract_name VARCHAR(256),
     name VARCHAR(256),
@@ -183,19 +167,13 @@ def write_to_dynamic(input):
     df_dynamic = df[['number', 'status', 'bike_stands', 'available_bike_stands', 
                      'available_bikes', 'last_update']]   
     df_dynamic.to_sql('dynamic', engine, if_exists='append', index=False)
-
-def write_to_latestDynamic(input):
-    df = makeDF(input)
-    df_dynamic = df[['number', 'status', 'bike_stands', 'available_bike_stands', 
-                     'available_bikes', 'last_update']]   
-    df_dynamic.to_sql('dynamic', engine, if_exists='append', index=False)
     
-def write_to_newLatestDynamic(input):
+def write_to_stationInformation(input):
     df = makeDF(input)
-    df_newLatestDynamic = df[['number', 'contract_name', 'name', 'address', 
+    df_stationInformation = df[['number', 'contract_name', 'name', 'address', 
                     'position_lat', 'position_lng', 'banking', 'bonus', 'status', 'bike_stands', 'available_bike_stands', 
                      'available_bikes', 'last_update']] 
-    df_newLatestDynamic.to_sql('newLatestDynamic', engine, if_exists='replace', index=False)
+    df_stationInformation.to_sql('stationInformation', engine, if_exists='replace', index=False)
 
 def write_to_weather(input):
     df = makeDF(input)
@@ -240,4 +218,3 @@ def dataDir_to_RDB():
 def weatherDir_to_RDB():
     for file in glob.glob("./weatherData/*"):
         write_to_weather(openFile(file))
-

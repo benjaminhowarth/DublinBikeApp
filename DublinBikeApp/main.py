@@ -87,7 +87,7 @@ def chart():
 @functools.lru_cache(maxsize=128)
 def stations():
     engine = get_db()
-    stations = engine.execute("SELECT * FROM dublinbikedb.newLatestDynamic")
+    stations = engine.execute("SELECT * FROM dublinbikedb.stationInformation")
     stationJson = []
     for i in stations:
         stationJson.append(dict(i)) 
