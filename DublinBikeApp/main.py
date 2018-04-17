@@ -12,10 +12,10 @@ import sys
 app = Flask(__name__)
 
 # Configure MySQL
-URI="dublinbikedb.cm66ft6swiuh.us-west-2.rds.amazonaws.com"
+URI="dublinbikedb.c3n1hjxadqkf.us-west-2.rds.amazonaws.com"
 PORT="3306"
 DB = "dublinbikedb"
-USER = "dublinbikedb"
+USER = "dublinbikeDB"
 PASSWORD = "password"
 
 def connect_to_database():
@@ -36,6 +36,7 @@ def close_connection(exception):
     if db is not None:
         db.close()
 """
+
 @app.route("/chartData/<int:station_number>")
 @functools.lru_cache(maxsize=128)
 def chartData(station_number):
@@ -63,9 +64,8 @@ def chartData(station_number):
 def chart():
     engine = get_db()
     sql = """
-    SELECT dublinbikedb.static.number, available_bikes, last_update
-    FROM dublinbikedb.static 
-    JOIN dublinbikedb.dynamic ON dublinbikedb.static.number = dublinbikedb.dynamic.number 
+    SELECT number, available_bikes, last_update
+    FROM dublinbikedb.dynamic
     """
     
     df = pd.read_sql(sql, engine)

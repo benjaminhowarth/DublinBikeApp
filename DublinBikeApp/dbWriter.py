@@ -9,10 +9,10 @@ from pandas.io.json import json_normalize
 
 # Code taken from Aonghus's Notes
 
-URI="dublinbikedb.cm66ft6swiuh.us-west-2.rds.amazonaws.com"
+URI="dublinbikedb.c3n1hjxadqkf.us-west-2.rds.amazonaws.com"
 PORT="3306"
 DB = "dublinbikedb"
-USER = "dublinbikedb"
+USER = "dublinbikeDB"
 PASSWORD = "password"
   
 engine = create_engine("mysql+mysqldb://{}:{}@{}:{}/{}"

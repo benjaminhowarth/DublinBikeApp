@@ -134,7 +134,7 @@ function initMap() {
                 scale: 5 + station.bike_stands/1.8,
                 strokeWeight: 0,
                 fillColor: 'red',
-                fillOpacity:.2 + (station.available_bikes/station.bike_stands)/2
+                fillOpacity: 0.2 + (station.available_bikes/station.bike_stands)/2
                 },     
 			map: map,		
 		});
