@@ -9,6 +9,7 @@ import pandas as pd
 import time
 from sklearn.externals import joblib
 import sys
+import collections
 
 app = Flask(__name__)
 
@@ -152,6 +153,9 @@ def forecastModel(station_number):
      'description_light intensity shower rain','description_light rain','description_light snow','description_mist',
      'description_moderate rain','description_overcast clouds','description_scattered clouds','description_shower rain',
      'description_shower sleet','description_shower snow']
+    if station_number ==50:
+        idealShape.pop(-1)
+        idealShape.pop(-1)
     # ensure that the size of the forecast data matches the data the model was trained on
     for i in idealShape:
         if i not in currentShape:
@@ -159,7 +163,13 @@ def forecastModel(station_number):
     prediction=prediction[idealShape]
     cfl=joblib.load('../DublinBikeApp/predictions/'+str(station_number)+'prediction.pkl')
     result=cfl.predict(prediction)
-    return jsonify(result.tolist())
+    listresult=result.tolist()
+    ResultsDict= collections.defaultdict(dict)
+    count=0
+    for i in listresult:
+        ResultsDict[str(forecastDf['weekday'][count])][str(forecastDf['hour'][count])]=i
+        count += 1
+    return jsonify(ResultsDict)
 
 @app.route("/predictions/<int:station_number>")
 @functools.lru_cache(maxsize=128)
