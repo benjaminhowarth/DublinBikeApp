@@ -9,6 +9,7 @@ body {
 }
 
 #mapHeader {
+	display: none;
 	text-align: center;
 	font-weight: bold;
 	font-family: 'Roboto';
@@ -56,6 +57,7 @@ main {
 
 
 #startUpMessage {
+	display:none;
 	alignment: center;
 	width: 100%;
 	text-align: center;
@@ -216,6 +218,7 @@ article {
 }
 
 #searchBar {
+	display: none;
 	background-color: rgba(255,0,0,0.4) ;
 	color: white;
 	font-family: Roboto;

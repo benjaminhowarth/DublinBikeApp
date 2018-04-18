@@ -212,6 +212,28 @@ function initMap() {
   map.addListener('bounds_changed', function() {
 	  searchBox.setBounds(map.getBounds());
   }); 
+  
+
+
+	 
+
+  	$("#startUpMessage").css('display', 'none');
+  	$("#searchBar").css('display', 'none');
+  	$("#mapHeader").css('display', 'none');
+  	   
+    setTimeout(function(){
+    $('#startUpMessage').delay(2000).fadeIn(2000);
+    $('#startUpMessage').delay(2000).fadeOut(2000);
+    $('#searchBar').delay(1000).fadeIn(2000);
+    $('#mapHeader').fadeIn(1000);
+   
+   
+    }, 3000);
+  
+  
+  
+  
+  
 }
 
 var chartGenerated = false;
@@ -313,6 +335,12 @@ function initChart(ChartStationNum, ChartStationAddress) {
 	});
 	
 	document.getElementById("chart-loading-div").style.display = 'none';
+	
+
+
+	
+	
+	
 }
 
 function showWeather(){	
