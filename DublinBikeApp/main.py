@@ -160,6 +160,26 @@ def forecastModel(station_number):
     result=cfl.predict(prediction)
     return jsonify(result.tolist())
 
+@app.route("/predictions/<int:station_number>")
+@functools.lru_cache(maxsize=128)
+def predictions(station_number):
+    station_number=station_number
+    engine = get_db()
+    sql = """
+    SELECT available_bikes, last_update
+    FROM dublinbikedb.static 
+    JOIN dublinbikedb.dynamic ON dublinbikedb.static.number = dublinbikedb.dynamic.number 
+    WHERE dublinbikedb.static.number = '{}'
+    """.format(station_number)
+    
+    df = pd.read_sql(sql, engine)
+    df['last_update'] =  pd.to_datetime((df['last_update']//1000), unit='s')
+    df['weekday'] = df['last_update'].dt.weekday_name
+    df['dayofyear'] = df['last_update'].dt.dayofyear
+    df['hour']=df['last_update'].dt.hour
+    
+    return df.to_json() 
+
 @app.route('/')
 #@functools.lru_cache(maxsize=128)
 def index():

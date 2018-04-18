@@ -15,7 +15,8 @@ def makePrediction(stationNumber):
     chart1 = requests.get("http://localhost:5000/predictions/"+str(stationNumber))
     chart2 = requests.get("http://localhost:5000/pastWeather")
     #load as json
-    mainJson, weatherJson = json.loads(chart1.text), json.loads(chart2.text)
+    mainJson= json.loads(chart1.text)
+    weatherJson =json.loads(chart2.text)
     #flatten the weather json
     dayofyear, description, weekday, hour=[],[],[],[]
     for i in weatherJson['dayofyear']:
@@ -105,13 +106,10 @@ def makePrediction(stationNumber):
     #Dump the model to a local file
     joblib.dump(rfc, str(stationNumber)+'prediction.pkl')
     
-    print('Done!',X.columns.tolist())
-makePrediction(50)   
-# X=requests.get("http://localhost:5000/stations")
-# rangeJson=json.loads(X)
-# Range=rangeJson['stationJson'][0]["count(*)"]
-# for i in range(1,Range+1):
-#     try:
-#         makePrediction(i)
-#     except:
-#         print('error')
+    print('Done!',X.columns.tolist()) 
+
+for i in range(1,105):
+    try:
+        makePrediction(i)
+    except:
+        print('error')
