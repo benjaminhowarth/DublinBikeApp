@@ -273,6 +273,7 @@ function initChart(ChartStationNum, ChartStationAddress) {
 					enabled: true
 				}
 			});
+			
 			document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
 			chartGenerated = true;
 		}

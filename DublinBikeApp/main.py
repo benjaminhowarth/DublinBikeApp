@@ -7,6 +7,7 @@ import sqlite3
 import functools
 import pandas as pd
 import time
+from sklearn.externals import joblib
 import sys
 
 app = Flask(__name__)
