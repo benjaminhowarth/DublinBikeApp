@@ -130,6 +130,36 @@ def pastWeather():
     df2['hour'] = df2['time'].dt.hour
     return df2.to_json()
 
+@app.route('/forecastModel/<int:station_number>')
+@functools.lru_cache(maxsize=128)
+def forecastModel(station_number):
+    engine=get_db()
+    weatherlist=[]
+    weather = "SELECT description, dt FROM dublinbikedb.forecast"
+    forecastDf=pd.read_sql(weather, engine)
+    forecastDf['dt'] =  pd.to_datetime((forecastDf['dt']), unit='s')
+    forecastDf['weekday'] = forecastDf['dt'].dt.weekday_name
+    forecastDf['hour'] = forecastDf['dt'].dt.hour
+    forecastDf.drop('dt', axis=1, inplace=True)
+    prediction_dummies_weekday = pd.get_dummies(forecastDf[['weekday']])
+    prediction_dummies_weather=pd.get_dummies(forecastDf[['description']])
+    prediction=pd.concat([forecastDf['hour'], prediction_dummies_weekday, prediction_dummies_weather], axis =1)
+    currentShape=prediction.columns.tolist()
+    idealShape=['hour','weekday_Friday','weekday_Monday','weekday_Saturday','weekday_Sunday','weekday_Thursday',
+    'weekday_Tuesday','weekday_Wednesday','description_broken clouds','description_clear sky',
+     'description_few clouds','description_fog','description_light intensity drizzle','description_light intensity drizzle rain',
+     'description_light intensity shower rain','description_light rain','description_light snow','description_mist',
+     'description_moderate rain','description_overcast clouds','description_scattered clouds','description_shower rain',
+     'description_shower sleet','description_shower snow']
+    # ensure that the size of the forecast data matches the data the model was trained on
+    for i in idealShape:
+        if i not in currentShape:
+            prediction[i]=0
+    prediction=prediction[idealShape]
+    cfl=joblib.load('../DublinBikeApp/predictions/'+str(station_number)+'prediction.pkl')
+    result=cfl.predict(prediction)
+    return jsonify(result.tolist())
+
 @app.route('/')
 #@functools.lru_cache(maxsize=128)
 def index():
