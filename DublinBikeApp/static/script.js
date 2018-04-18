@@ -215,112 +215,101 @@ function initMap() {
 }
 
 var chartGenerated = false;
-var chartJson;
-
-function loadChartData() {
-	$.getJSON(localAddress+"chart/", function(json) {
-		chartJson = json;
-	});
-}
 
 function initChart(ChartStationNum, ChartStationAddress) {
 	document.getElementById("chart-loading-div").style.display = 'flex';
 	document.getElementById("buttonDiv").style.display = 'flex'
-		
-	if (typeof chartJson == "undefined") {
-		console.log(chartJson);
-		return
-	}
-		
-	var data = chartJson[ChartStationNum];
 
-	var dataMon = data['Monday'];
-	var dataTue = data['Tuesday'];
-	var dataWed = data['Wednesday'];
-	var dataThu = data['Thursday'];
-	var dataFri = data['Friday'];
-	var dataSat = data['Saturday'];
-	var dataSun = data['Sunday'];
+	$.getJSON(localAddress+"chart/"+ChartStationNum, function(json){
 	
-	if (chartGenerated == true){
-		chart.load({
-			columns:[
-				['Monday'].concat(dataMon),
-				['Tuesday'].concat(dataTue),
-				['Wednesday'].concat(dataWed),
-				['Thursday'].concat(dataThu),
-				['Friday'].concat(dataFri),
-				['Saturday'].concat(dataSat),
-				['Sunday'].concat(dataSun)
-			]
-		});
-		document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
-	}
-	else{
-		chart = c3.generate({
-			bindto: document.getElementById("chart"),
-			data: {
-				json: {
-					Monday: dataMon,
-					Tuesday: dataTue,
-					Wednesday: dataWed,
-					Thursday: dataThu,
-					Friday: dataFri,
-					Saturday: dataSat,
-					Sunday: dataSun
+		var Mon = json['Monday'];
+		var Tue = json['Tuesday'];
+		var Wed = json['Wednesday'];
+		var Thu = json['Thursday'];
+		var Fri = json['Friday'];
+		var Sat = json['Saturday'];
+		var Sun = json['Sunday'];
+	
+		if (chartGenerated == true){
+			chart.load({
+				columns:[
+					['Monday'].concat(Mon),
+					['Tuesday'].concat(Tue),
+					['Wednesday'].concat(Wed),
+					['Thursday'].concat(Thu),
+					['Friday'].concat(Fri),
+					['Saturday'].concat(Sat),
+					['Sunday'].concat(Sun)
+				]
+			});
+			document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
+		} else {
+			chart = c3.generate({
+				bindto: document.getElementById("chart"),
+				data: {
+					json: {
+						Monday: Mon,
+						Tuesday: Tue,
+						Wednesday: Wed,
+						Thursday: Thu,
+						Friday: Fri,
+						Saturday: Sat,
+						Sunday: Sun
+					},
+					type: 'spline'
 				},
-				type: 'spline'
-			},
-			axis: {
-				x: {
-					label: 'Hours'
+				axis: {
+					x: {
+						label: 'Hours'
+					},
+					y: {
+						label: 'Average Available Bikes'
+					}
 				},
-				y: {
-					label: 'Average Available Bikes'
+				point: {
+					show: false
+				},
+				zoom: {
+					enabled: true
 				}
-			},
-			point: {
-				show: false
-			},
-			zoom: {
-				enabled: true
-			}
-		});
-		document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
-		chartGenerated = true;
-	}
-	
-	chartBtn1.onclick = function(){
-		chart.load({
-			columns:[
-				['Monday'].concat(dataMon),
-				['Tuesday'].concat(dataTue),
-				['Wednesday'].concat(dataWed),
-				['Thursday'].concat(dataThu),
-				['Friday'].concat(dataFri),
-				['Saturday'].concat(dataSat),
-				['Sunday'].concat(dataSun)
-			],
-			title: {
-				text: "hello"
-			}
-		});
-	}
-	
-	chartBtn2.onclick = function(){
-		chart.load({
-			columns: [
-				["Monday", 0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10,0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10],
-				["Tuesday", 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0],
-				["Wednesday", 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20],
-				["Thursday", 30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0],
-				["Friday", 0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30,0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30],
-				["Saturday", 40,0,40,0, 40, 0, 40,0,40,0, 40, 0,40,0,40,0, 40, 0, 40,0,40,0, 40, 0],
-				["Sunday", 0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40,0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40]
-				
-			] 
-		});
-	}
+			});
+			document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
+			chartGenerated = true;
+		}
+		
+		chartBtn1.onclick = function(){
+			chart.load({
+				columns:[
+					['Monday'].concat(Mon),
+					['Tuesday'].concat(Tue),
+					['Wednesday'].concat(Wed),
+					['Thursday'].concat(Thu),
+					['Friday'].concat(Fri),
+					['Saturday'].concat(Sat),
+					['Sunday'].concat(Sun)
+				],
+				title: {
+					text: "hello"
+				}
+			});
+		}
+		
+		chartBtn2.onclick = function(){
+			chart.load({
+				columns: [
+					["Monday", 0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10,0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10],
+					["Tuesday", 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0],
+					["Wednesday", 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20],
+					["Thursday", 30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0],
+					["Friday", 0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30,0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30],
+					["Saturday", 40,0,40,0, 40, 0, 40,0,40,0, 40, 0,40,0,40,0, 40, 0, 40,0,40,0, 40, 0],
+					["Sunday", 0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40,0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40]
+					
+				] 
+			});
+		}
+		
+	});
 	
 	document.getElementById("chart-loading-div").style.display = 'none';
 }
