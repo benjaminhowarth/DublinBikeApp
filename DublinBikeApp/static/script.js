@@ -2,33 +2,25 @@ var sidebar = false; // sidebar = true if sidebar is open
 var localAddress = window.location.protocol // Local url
 
 function openSidebar(){
-	$('#toggle').html("&lt;&lt;&lt;")
+
 	$('aside').addClass('open');
-	$('#toggleOpen').css("display", "none");
+
 	$('#mapHeader').fadeOut()
 	$('#startUpMessage').css("display", "none");
 	$('#searchBar').fadeOut()
+	
 	sidebar = true;
 }
 
 function closeSidebar() {
-	$('#toggle').html("&gt;&gt;&gt;")
+
 	$('aside').removeClass('open');
 	$('#mapHeader').fadeIn()
 	$('#searchBar').fadeIn();
 	sidebar = false;
 }
 
-$(document).ready(function(){
-	$('#toggle').click(function() {
-		// If sidebar is not open...
-		if (!sidebar) {
-			openSidebar()
-		} else {
-			closeSidebar()
-		}
-	});
-});
+
 
 $(document).ready(function(){
 	$('#startUpMessage').delay(3000).fadeOut(2000);
@@ -140,6 +132,7 @@ function initMap() {
 		});
 		
 		marker.addListener('click', function(){
+			document.getElementById("chartBtn2").innerHTML = "Loading...";
 			if(infoWindow) {
 				infoWindow.close();				
 			}
@@ -152,7 +145,12 @@ function initMap() {
 			});
 
 			infoWindow.open(map, marker);
-			
+			document.getElementById("chartBtn1").innerHTML = "Loading...";
+			document.getElementById("chartBtn1").disabled = true;
+			document.getElementById("chartBtn2").innerHTML = "Loading...";
+			document.getElementById("chartBtn2").disabled = true;
+			document.getElementById("stationChartTitle").innerHTML = "Loading...";
+
 			initChart(station.number, station.address)
 		});
 	}
@@ -212,38 +210,30 @@ function initMap() {
   map.addListener('bounds_changed', function() {
 	  searchBox.setBounds(map.getBounds());
   }); 
-  
-
-
-	 
 
   	$("#startUpMessage").css('display', 'none');
   	$("#searchBar").css('display', 'none');
   	$("#mapHeader").css('display', 'none');
   	   
     setTimeout(function(){
-    $('#startUpMessage').delay(2000).fadeIn(2000);
-    $('#startUpMessage').delay(2000).fadeOut(2000);
-    $('#searchBar').delay(1000).fadeIn(2000);
-    $('#mapHeader').fadeIn(1000);
-   
-   
-    }, 3000);
-  
-  
-  
-  
-  
+	  if(!sidebar){
+    $('#startUpMessage').delay(000).fadeIn(2000);
+    $('#startUpMessage').delay(00).fadeOut(2000);
+    $('#searchBar').delay(300).fadeIn(2000);
+    $('#mapHeader').fadeIn(2000);
+	  };
+    }, 2500);
 }
 
 var chartGenerated = false;
+var viewingAverage = true;
 
 function initChart(ChartStationNum, ChartStationAddress) {
-	document.getElementById("chart-loading-div").style.display = 'flex';
+
 	document.getElementById("buttonDiv").style.display = 'flex'
 
 	$.getJSON(localAddress+"chart/"+ChartStationNum, function(json){
-	
+		
 		var Mon = json['Monday'];
 		var Tue = json['Tuesday'];
 		var Wed = json['Wednesday'];
@@ -251,8 +241,10 @@ function initChart(ChartStationNum, ChartStationAddress) {
 		var Fri = json['Friday'];
 		var Sat = json['Saturday'];
 		var Sun = json['Sunday'];
-	
-		if (chartGenerated == true){
+		document.getElementById("chartBtn1").innerHTML = "Average";
+		document.getElementById("chartBtn1").disabled = false;
+		
+		if (chartGenerated == true && viewingAverage == true){
 			chart.load({
 				columns:[
 					['Monday'].concat(Mon),
@@ -266,6 +258,7 @@ function initChart(ChartStationNum, ChartStationAddress) {
 			});
 			document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
 		} else {
+		
 			chart = c3.generate({
 				bindto: document.getElementById("chart"),
 				data: {
@@ -295,52 +288,135 @@ function initChart(ChartStationNum, ChartStationAddress) {
 					enabled: true
 				}
 			});
-			
-			document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
-			chartGenerated = true;
 		}
-		
+			document.getElementById('stationChartTitle').innerHTML = "Average Available Bikes at " + ChartStationAddress;
+			chartGenerated = true;
+	
 		chartBtn1.onclick = function(){
-			chart.load({
-				columns:[
-					['Monday'].concat(Mon),
-					['Tuesday'].concat(Tue),
-					['Wednesday'].concat(Wed),
-					['Thursday'].concat(Thu),
-					['Friday'].concat(Fri),
-					['Saturday'].concat(Sat),
-					['Sunday'].concat(Sun)
-				],
-				title: {
-					text: "hello"
+			viewingAverage = true;
+			chart = c3.generate({
+				bindto: document.getElementById("chart"),
+				data: {
+					json: {
+						Monday: Mon,
+						Tuesday: Tue,
+						Wednesday: Wed,
+						Thursday: Thu,
+						Friday: Fri,
+						Saturday: Sat,
+						Sunday: Sun
+					},
+					type: 'spline'
+				},
+				axis: {
+					x: {
+						label: 'Hours'
+					},
+					y: {
+						label: 'Average Available Bikes'
+					}
+				},
+				point: {
+					show: false
+				},
+				zoom: {
+					enabled: true
 				}
 			});
-		}
+
+		document.getElementById('stationChartTitle').innerHTML = "Average Available Bikes at " + ChartStationAddress;
+
+		};
 		
-		chartBtn2.onclick = function(){
-			chart.load({
-				columns: [
-					["Monday", 0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10,0,10,0, 10, 0, 10, 0,10,0, 10, 0, 10],
-					["Tuesday", 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0, 20,0,20,0, 20, 0],
-					["Wednesday", 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20, 0,20,0, 20, 0, 20],
-					["Thursday", 30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0, 30,0,30,0, 30, 0],
-					["Friday", 0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30,0,30,0, 30, 0, 30, 0,30,0, 30, 0, 30],
-					["Saturday", 40,0,40,0, 40, 0, 40,0,40,0, 40, 0,40,0,40,0, 40, 0, 40,0,40,0, 40, 0],
-					["Sunday", 0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40,0,40,0, 40, 0, 40, 0,40,0, 40, 0, 40]
+		$.getJSON(localAddress+"forecastModel/"+ChartStationNum, function(jsonP){
+			
+			var MondayArray = [];
+			for (i in jsonP["Monday"]){
+				var keyMon = jsonP["Monday"][i];
+				MondayArray.push(keyMon);
+			}
 					
-				] 
+			var TuesdayArray = [];
+			for (i in jsonP["Tuesday"]){
+				var keyTue = jsonP["Tuesday"][i];
+				TuesdayArray.push(keyTue);
+			}
+			
+			var WednesdayArray = [];
+			for (i in jsonP["Wednesday"]){
+				
+				var keyWed = jsonP["Wednesday"][i];
+				WednesdayArray.push(keyWed);
+			}
+			
+			var ThursdayArray = [];
+			for (i in jsonP["Thursday"]){
+				
+				var keyThu = jsonP["Thursday"][i];
+				ThursdayArray.push(keyThu);
+			}
+			
+			var FridayArray = [];
+			for (i in jsonP["Friday"]){
+				
+				var keyFri = jsonP["Friday"][i];
+				FridayArray.push(keyFri);
+			}
+			var SaturdayArray = [];
+			for (i in jsonP["Saturday"]){
+				var keySat = jsonP["Saturday"][i];
+				SaturdayArray.push(keySat);
+			}
+			
+			var SundayArray = [];
+			for (i in jsonP["Sunday"]){
+				var keySun = jsonP["Sunday"][i];
+				SundayArray.push(keySun);
+			}
+			document.getElementById("chartBtn2").innerHTML = "Predicted";
+			document.getElementById("chartBtn2").disabled = false;
+			chartBtn2.onclick = function(){
+			viewingAverage = false;
+			chart = c3.generate({
+				bindto: document.getElementById("chart"),
+				data: {
+					json: {
+						
+						Monday: MondayArray,
+  						Tuesday: TuesdayArray,
+						Wednesday: WednesdayArray,
+						Thursday: ThursdayArray,
+						Friday: FridayArray,
+						Saturday: SaturdayArray,
+						Sunday: SundayArray
+					},
+					type: 'spline'
+				},
+				axis: {
+					x: {
+						label: 'Hours',
+						type: 'category',
+				           categories:  ['0', '3', '6', '9', '12', '15', '18', '21']		
+					},
+					y: {
+						label: 'Predicted Available Bikes'
+					}
+				},
+				point: {
+					show: false
+				},
+				zoom: {
+					enabled: true
+				}
 			});
-		}
+			
+			document.getElementById('stationChartTitle').innerHTML = "Predicted Available Bikes at " + ChartStationAddress;
+			chartGenerated = true;;
 		
+		};	
+	
 	});
-	
-	document.getElementById("chart-loading-div").style.display = 'none';
-	
-
-
-	
-	
-	
+});
 }
 
 function showWeather(){	

@@ -25,20 +25,19 @@
 					<img id='weather-loading-image' src='static/loading.gif' alt='loading...'>
 				</div>
 				<div id='buttonDiv'>
-					<button id='chartBtn1'>Chart One</button>
+					<button id='chartBtn1'>Average</button>
 					&nbsp;
-					<button id='chartBtn2'>Chart Two</button>
+					<button id='chartBtn2'>Predicted</button>
 				</div>
-				<div id='chart-loading-div'>
+				<!-- <div id='chart-loading-div'>
 					<img id="chart-loading-image" src="static/loading.gif" alt="loading...">
-				</div>
+				</div> -->
 				<div><h5 id="stationChartTitle"></h5></div>
 				<div id="chart"></div>	
 			</article>
 		</aside>
 		<div id="mapContainer">
 			<input id="searchBar" class="controls" type="text" placeholder="Search" onfocus="if(this.value != '') {this.value=''}" onblur="this.value ='Search'">
-			<button id="toggle">&gt;&gt;&gt;</button>
 			<div id='startUpMessage'>Click on a station to view its occupancy information</div>
 			<div id='map'></div>		
 			
