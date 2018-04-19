@@ -100,15 +100,15 @@ def makePrediction(stationNumber):
     X = pd.concat([df_cont_feat, df_dummies_weekday, df_dummies_weather], axis =1)
     y = newdf[['availableBikes']]
     # Train RF with 100 trees
-    rfc = RandomForestClassifier(n_estimators=1000, max_depth=7, max_features='auto', oob_score=True, random_state=1)
+    rfc = RandomForestClassifier(n_estimators=1000, max_depth=4, max_features='auto', oob_score=True, random_state=1)
     # Fit model on full dataset
     rfc.fit(X, y.values.ravel())
     #Dump the model to a local file
     joblib.dump(rfc, str(stationNumber)+'prediction.pkl')
     
-    print('Done!',X.columns.tolist()) 
+    print('Done!',stationNumber,X.columns.tolist()) 
 
-for i in range(1,105):
+for i in range(96,109):
     try:
         makePrediction(i)
     except:
