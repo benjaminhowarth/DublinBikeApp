@@ -15,7 +15,7 @@ def write_to_file(text, now):
 
 def main():
     count = 0
-    while count ==0:
+    while True:
         try:
             now = datetime.datetime.now()
             response = requests.get(STATIONS, params={"apiKey": APIKEY, "contract": CONTRACT})
@@ -29,7 +29,9 @@ def main():
                 write_to_static(makeDF(response.text))
                 count = 0
         except:
-            print(traceback.format_exc())
+            file = open("errors/scraper_errors.txt","w")
+            file.write(traceback.format_exc())
+            
     return
 
 main()

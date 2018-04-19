@@ -25,9 +25,10 @@ def main():
             time.sleep(3*60*60)
     
         except:
-            print(traceback.format_exc())
+            file = open("errors/forecastScraper_errors.txt","w")
+            file.write(traceback.format_exc())
                 
-        return
+    return
 
 main()
 

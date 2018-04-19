@@ -23,7 +23,9 @@ def main():
             write_to_weather(response.text)           
             time.sleep(10*60)
         except:
-            print(traceback.format_exc())
+            file = open("errors/weatherscraper_errors.txt","w")
+            file.write(traceback.format_exc())
+            
     return
 
 main()
