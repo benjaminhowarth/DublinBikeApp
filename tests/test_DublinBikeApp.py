@@ -8,8 +8,6 @@ import os
 import unittest
 from click.testing import CliRunner
 from idlelib.idle_test.test_query import ModuleNameTest
-sys.path.append('../DublinBikeApp')
-from main import *
 from urllib.request import urlopen
 import requests
 from flask import Flask, jsonify
