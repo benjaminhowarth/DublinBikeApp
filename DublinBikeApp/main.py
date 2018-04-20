@@ -13,7 +13,7 @@ import collections
 
 app = Flask(__name__)
 
-# Configure MySQL #
+# Configure MySQL 
 URI="dublinbikedb.c3n1hjxadqkf.us-west-2.rds.amazonaws.com"
 PORT="3306"
 DB = "dublinbikedb"
