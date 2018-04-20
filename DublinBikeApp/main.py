@@ -31,21 +31,11 @@ def get_db():
         db = g._database = connect_to_database()
     return db
 
-"""
-@app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
-"""
-
 @app.route("/chartData/<int:station_number>")
 @functools.lru_cache(maxsize=128)
 def chartData(station_number):
     
     engine = get_db()
-#     chartData = []
-#    rows = engine.execute("SELECT available_bikes, bike_stands, DAYNAME(FROM_UNIXTIME(last_update/1000)) as Day, CONCAT(HOUR(FROM_UNIXTIME(last_update/1000)),':', MINUTE(FROM_UNIXTIME(last_update/1000))) as Time FROM dublinbikedb.static JOIN dublinbikedb.dynamic ON dublinbikedb.static.number = dublinbikedb.dynamic.number where dublinbikedb.static.number = '{}'".format(station_number))
     sql = """
     SELECT available_bikes, last_update
     FROM dublinbikedb.static 
@@ -95,8 +85,6 @@ def chart(station_number):
     print("Total runtime: ", json_time - start)
          
     return json.dumps(groupJson)
-    
-#     return json.dumps(groupJson)
 
 @app.route("/stations")
 @functools.lru_cache(maxsize=128)
@@ -192,7 +180,7 @@ def predictions(station_number):
     return df.to_json() 
 
 @app.route('/')
-#@functools.lru_cache(maxsize=128)
+@functools.lru_cache(maxsize=128)
 def index():
     return render_template('index.html')
 
