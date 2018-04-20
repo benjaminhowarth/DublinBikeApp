@@ -15,6 +15,8 @@ def write_to_file(text, now):
         
 #http://api.openweathermap.org/data/2.5/weather?id=7778677&appid=85d28fa8606703e0e0527150fd64610d
 def main():
+    """Requests JSON from openweathermap.org and writes it to database."""
+    
     while True:
         try:
             now = datetime.datetime.now()
@@ -23,6 +25,7 @@ def main():
             write_to_weather(response.text)           
             time.sleep(10*60)
         except:
+            # If error, write error to file.
             file = open("errors/weatherscraper_errors.txt","w")
             file.write(traceback.format_exc())
             

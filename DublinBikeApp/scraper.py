@@ -16,6 +16,12 @@ def write_to_file(text, now):
 def main():
     count = 0
     while True:
+        """
+        Requests JSON from jcdecaux.com and writes it to database.
+        Writes to the dynamic and stationInformation tables every 5 mins.
+        Writes to the static table once a day.
+        """
+        
         try:
             now = datetime.datetime.now()
             response = requests.get(STATIONS, params={"apiKey": APIKEY, "contract": CONTRACT})
@@ -29,6 +35,7 @@ def main():
                 write_to_static(makeDF(response.text))
                 count = 0
         except:
+            # If error, write error to file.
             file = open("errors/scraper_errors.txt","w")
             file.write(traceback.format_exc())
             

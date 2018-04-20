@@ -11,12 +11,16 @@ from sklearn.externals import joblib
 
 
 def makePrediction(stationNumber):
+    """Generates Pickle files."""
+    
     #read in databases
     chart1 = requests.get("http://localhost:5000/predictions/"+str(stationNumber))
     chart2 = requests.get("http://localhost:5000/pastWeather")
+    
     #load as json
     mainJson= json.loads(chart1.text)
     weatherJson =json.loads(chart2.text)
+    
     #flatten the weather json
     dayofyear, description, weekday, hour=[],[],[],[]
     for i in weatherJson['dayofyear']:
@@ -40,6 +44,7 @@ def makePrediction(stationNumber):
         weekday.append(mainJson['weekday'][i])
     for i in mainJson['hour']:
         hour.append(mainJson['hour'][i])
+        
     #append to dict, for making dataframe
     mainDict = {}
     mainDict['Dayofyear']= mainDayofyear
@@ -72,12 +77,15 @@ def makePrediction(stationNumber):
     mainDf['period'] = mainDf[['Dayofyear', 'hour']].apply(lambda x: ''.join(x), axis=1)
     newMain= mainDf.groupby([mainDf["Dayofyear"],mainDf['period'],mainDf['weekday'], mainDf["hour"]]).mean().round()
     newMain.reset_index(inplace=True)
+    
     # merge tables
     newdf= pd.merge(newMain, weatherDf, how='right', left_on='period', right_on = 'period')
+    
     # drop duplicate columns and period column
     newdf = newdf.drop('hour_y', 1)
     newdf = newdf.drop('period', 1)
     newdf = newdf.drop('Dayofyear_y', 1)
+    
     # tidy up data types and names
     newdf['dayOfYear']=newdf['Dayofyear_x'].astype(float)
     newdf['availableBikes']=newdf['availableBikes'].astype(float)
@@ -85,24 +93,31 @@ def makePrediction(stationNumber):
     newdf = newdf.drop('hour_x', 1)
     newdf = newdf.drop('Dayofyear_x', 1)
     newdf.head()
+    
     # remove all NaN columsn from target feature
     newdf = newdf[np.isfinite(newdf['availableBikes'])]
+    
     # set categorical features
     newdf['description'].astype('category')
     newdf.dtypes
     newdf = newdf[newdf.description !='light shower snow']
     newdf = newdf[newdf.description !='description_light snow']
+    
     # decided not to use dayofyear as a continuous feature
     df_cont_feat = newdf[['hour']]
     df_dummies_weekday = pd.get_dummies(newdf[['weekday']])
     df_dummies_weather=pd.get_dummies(newdf[['description']])
+    
     # Add dummies to the other continuous features
     X = pd.concat([df_cont_feat, df_dummies_weekday, df_dummies_weather], axis =1)
     y = newdf[['availableBikes']]
+    
     # Train RF with 100 trees
     rfc = RandomForestClassifier(n_estimators=1000, max_depth=4, max_features='auto', oob_score=True, random_state=1)
+    
     # Fit model on full dataset
     rfc.fit(X, y.values.ravel())
+    
     #Dump the model to a local file
     joblib.dump(rfc, str(stationNumber)+'prediction.pkl')
     
