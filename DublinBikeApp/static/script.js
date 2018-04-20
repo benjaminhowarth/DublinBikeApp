@@ -26,248 +26,138 @@ function initMap() {
 	var infoWindow;
 	var icon = 'http://icons.iconarchive.com/icons/elegantthemes/beautiful-flat-one-color/32/bike-icon.png';
 	// Create Map
-	var map = new google.maps.Map(document.getElementById('map'), {
-		zoom: 14,
-		center: dublin,
-		mapTypeControl: false,
-		// styles the map
-		styles: [
-			{
-				"featureType": "landscape.natural",
-				"elementType": "geometry.fill",
-				"stylers": [
-					{
-						"visibility": "on"
-					},
-					{
-						"color": "#e0efef"
-					}
-	        ]
-	    },
-			{
-				"featureType": "poi",
-				"elementType": "geometry.fill",
-				"stylers": [
-					{
-						"visibility": "on"
-					},
-					{
-						"hue": "#1900ff"
-					},
-					{
-						"color": "#c0e8e8"
-					}
-	        ]
-	    },
-			{
-				"featureType": "road",
-				"elementType": "geometry",
-				"stylers": [
-					{
-						"lightness": 100
-					},
-					{
-						"visibility": "simplified"
-					}]
-	    },
-			{
-				"featureType": "poi",
-				"elementType": "labels",
-				"stylers": [
-					{
-						"visibility": "off"
-					}]
-	    },
-			{
-				"featureType": "road",
-				"elementType": "labels",
-				"stylers": [
-					{
-						"visibility": "simplified"
-					}
-	        ]
-	    },
-
-			{
-				"featureType": "road.highway",
-				"elementType": "labels",
-				"stylers": [
-					{
-						"visibility": "off"
-					}
-	            ]
-	    },
-
-			{
-				"featureType": "road.highway.controlled_access",
-				"stylers": [
-					{
-						"visibility": "off"
-	          }
-	        ]
-	      },
-
-			{
-				"featureType": "road.arterial",
-				"stylers": [
-					{
-						"visibility": "off"
-	          }
-	        ]
-	      },
-
-
-			{
-				"featureType": "transit",
-				"elementType": "labels.icon",
-				"stylers": [
-					{
-						"visibility": "off"
-					}
-	        ]
-	    },
-			{
-				"featureType": "transit.line",
-				"elementType": "geometry",
-				"stylers": [
-					{
-						"visibility": "on"
-					},
-					{
-						"lightness": 700
-					}]
-	    },
-			{
-				"featureType": "water",
-				"elementType": "all",
-				"stylers": [
-					{
-						"color": "#99ddff"
-					}]
-	    }]
-	});
-
-	function addMarker(station) {
-		var marker = new google.maps.Marker({
-			position: {
-				lat: station.position_lat,
-				lng: station.position_lng
-			},
-			label: "" + station.available_bikes,
-			icon: {
-				path: google.maps.SymbolPath.CIRCLE,
-				scale: 5 + station.bike_stands / 1.8,
-				strokeWeight: 0,
-				fillColor: 'red',
-				fillOpacity: 0.2 + (station.available_bikes / station.bike_stands) / 2
-			},
-			map: map,
+	
+	$.get( 'static/mapStyle.js', function( data ) {
+		var map = new google.maps.Map(document.getElementById('map'), {
+			zoom: 14,
+			center: dublin,
+			mapTypeControl: false,
+			// styles the map
+			styles: JSON.parse(data)
 		});
-
-		marker.addListener('click', function () {
-			document.getElementById("predChartBtn").innerHTML = "Loading...";
+	
+		function addMarker(station) {
+			var marker = new google.maps.Marker({
+				position: {
+					lat: station.position_lat,
+					lng: station.position_lng
+				},
+				label: "" + station.available_bikes,
+				icon: {
+					path: google.maps.SymbolPath.CIRCLE,
+					scale: 5 + station.bike_stands / 1.8,
+					strokeWeight: 0,
+					fillColor: 'red',
+					fillOpacity: 0.2 + (station.available_bikes / station.bike_stands) / 2
+				},
+				map: map,
+			});
+	
+			marker.addListener('click', function () {
+				document.getElementById("predChartBtn").innerHTML = "Loading...";
+				if (infoWindow) {
+					infoWindow.close();
+				}
+				openSidebar();
+				infoWindow = new google.maps.InfoWindow({
+					content: '<h3>' + station.address + '</h3>' +
+						'<h4>Available Bikes = ' + station.available_bikes + '</h4>' +
+						'<h4>Available Bike Stands = ' + station.available_bike_stands + '</h4>'
+				});
+	
+				infoWindow.open(map, marker);
+				document.getElementById("avgChartBtn").innerHTML = "Loading...";
+				document.getElementById("avgChartBtn").disabled = true;
+				document.getElementById("predChartBtn").innerHTML = "Loading...";
+				document.getElementById("predChartBtn").disabled = true;
+				document.getElementById("stationChartTitle").innerHTML = "Loading...";
+	
+				initChart(station.number, station.address)
+			});
+		}
+		
+	
+		$.getJSON(localAddress + "/stations", null, function (data) {
+			
+			
+			if ('stationJson' in data) {
+				var stations = data.stationJson;
+				for (var i = 0; i < stations.length; i++) {
+					addMarker(stations[i]);
+				};
+			};
+		});
+	
+		map.addListener('click', function () {
 			if (infoWindow) {
 				infoWindow.close();
 			}
-			openSidebar();
-			infoWindow = new google.maps.InfoWindow({
-				content: '<h3>' + station.address + '</h3>' +
-					'<h4>Available Bikes = ' + station.available_bikes + '</h4>' +
-					'<h4>Available Bike Stands = ' + station.available_bike_stands + '</h4>'
-			});
-
-			infoWindow.open(map, marker);
-			document.getElementById("avgChartBtn").innerHTML = "Loading...";
-			document.getElementById("avgChartBtn").disabled = true;
-			document.getElementById("predChartBtn").innerHTML = "Loading...";
-			document.getElementById("predChartBtn").disabled = true;
-			document.getElementById("stationChartTitle").innerHTML = "Loading...";
-
-			initChart(station.number, station.address)
+			closeSidebar()
 		});
-	}
 	
-
-	$.getJSON(localAddress + "/stations", null, function (data) {
-		
-		
-		if ('stationJson' in data) {
-			var stations = data.stationJson;
-			for (var i = 0; i < stations.length; i++) {
-				addMarker(stations[i]);
-			};
-		};
-	});
-
-	map.addListener('click', function () {
-		if (infoWindow) {
-			infoWindow.close();
-		}
-		closeSidebar()
-	});
-
-	// Unfocus search bar when the map zooms
-	google.maps.event.addListener(map, 'zoom_changed', function () {
-		document.getElementById("searchBar").blur();
-	});
-
-	// Creating a search bar
-	// From: https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
-	var input = document.getElementById('searchBar');
-	var searchBox = new google.maps.places.SearchBox(input);
-	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-	searchBox.addListener('places_changed', function () {
-		var places = searchBox.getPlaces();
-
-		if (places.length == 0) {
-			return;
-		}
-
-		var bounds = new google.maps.LatLngBounds();
-		
-		places.forEach(function (place) {
-			if (!place.geometry) {
-				console.log("Returned place contains no geometry");
+		// Unfocus search bar when the map zooms
+		google.maps.event.addListener(map, 'zoom_changed', function () {
+			document.getElementById("searchBar").blur();
+		});
+	
+		// Creating a search bar
+		// From: https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
+		var input = document.getElementById('searchBar');
+		var searchBox = new google.maps.places.SearchBox(input);
+		map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+	
+		searchBox.addListener('places_changed', function () {
+			var places = searchBox.getPlaces();
+	
+			if (places.length == 0) {
 				return;
 			}
-
-			if (place.geometry.viewport) {
-				bounds.union(place.geometry.viewport);
-			} else {
-				bounds.extend(place.geometry.location);
-			}
+	
+			var bounds = new google.maps.LatLngBounds();
+			
+			places.forEach(function (place) {
+				if (!place.geometry) {
+					console.log("Returned place contains no geometry");
+					return;
+				}
+	
+				if (place.geometry.viewport) {
+					bounds.union(place.geometry.viewport);
+				} else {
+					bounds.extend(place.geometry.location);
+				}
+			});
+			map.fitBounds(bounds);
 		});
-		map.fitBounds(bounds);
-	});
-
-	map.addListener('bounds_changed', function () {
-		searchBox.setBounds(map.getBounds());
-	});
-
-	$("#startUpMessage").css('display', 'none');
-	$("#searchBar").css('display', 'none');
-	$("#mapHeader").css('display', 'none');  
-	setTimeout(function () {
-		if (!sidebar) { 
-			$('#startUpMessage').fadeIn(2000);
-		 	$('#startUpMessage').delay(1000).fadeOut(2000);
-			
-		}; 
-	}, 3400);
 	
-	setTimeout(function () {
-		if (!sidebar) { 
-			$('#searchBar').fadeIn(2000); 
-			
-		}; 
-	}, 3000);
+		map.addListener('bounds_changed', function () {
+			searchBox.setBounds(map.getBounds());
+		});
 	
-	setTimeout(function () {
-		if (!sidebar) { 
-			$('#mapHeader').fadeIn(2000);
-		}; 
-	}, 2500);
+		$("#startUpMessage").css('display', 'none');
+		$("#searchBar").css('display', 'none');
+		$("#mapHeader").css('display', 'none');  
+		setTimeout(function () {
+			if (!sidebar) { 
+				$('#startUpMessage').fadeIn(2000);
+			 	$('#startUpMessage').delay(1000).fadeOut(2000);
+				
+			}; 
+		}, 3400);
+		
+		setTimeout(function () {
+			if (!sidebar) { 
+				$('#searchBar').fadeIn(2000); 
+				
+			}; 
+		}, 3000);
+		
+		setTimeout(function () {
+			if (!sidebar) { 
+				$('#mapHeader').fadeIn(2000);
+			}; 
+		}, 2500);
+	});
 }
 
 var chartGenerated = false;
