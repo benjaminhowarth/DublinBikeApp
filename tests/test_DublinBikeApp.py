@@ -1,34 +1,64 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 """Tests for `DublinBikeApp` package."""
-
-
+import sys
+import os
 import unittest
 from click.testing import CliRunner
+from idlelib.idle_test.test_query import ModuleNameTest
+sys.path.append('../DublinBikeApp')
+from main import *
+from urllib.request import urlopen
+import requests
+from flask import Flask, jsonify
+from flask_testing import TestCase
+from flask_testing import LiveServerTestCase
 
-from DublinBikeApp import DublinBikeApp
-from DublinBikeApp import cli
+""" Run main.py before running tests"""
 
+class MyTest(LiveServerTestCase):
 
-class TestDublinbikeapp(unittest.TestCase):
-    """Tests for `DublinBikeApp` package."""
+    def create_app(self):
+        app = Flask(__name__)
+        app.config['TESTING'] = True
 
-    def setUp(self):
-        """Set up test fixtures, if any."""
+        # Set to 0 to have the OS pick the port.
+        app.config['LIVESERVER_PORT'] = 0
 
-    def tearDown(self):
-        """Tear down test fixtures, if any."""
+        return app
 
-    def test_000_something(self):
-        """Test something."""
+    def test_server_is_up_and_running(self):
 
-    def test_command_line_interface(self):
-        """Test the CLI."""
-        runner = CliRunner()
-        result = runner.invoke(cli.main)
-        assert result.exit_code == 0
-        assert 'DublinBikeApp.cli.main' in result.output
-        help_result = runner.invoke(cli.main, ['--help'])
-        assert help_result.exit_code == 0
-        assert '--help  Show this message and exit.' in help_result.output
+        response = urlopen('http://localhost:5000')
+        # Check that localhost:5000 is running 
+        self.assertEqual(response.code, 200)
+    # test that these app routings return json
+    def test_some_chart_json(self):
+        response = requests.get("http://localhost:5000/chart/8")
+        self.assertIsInstance(response.json(), dict)
+        
+    def test_some_pastWeather_json(self):
+        response = requests.get("http://localhost:5000/pastWeather")
+        self.assertIsInstance(response.json(), dict)
+    
+    def test_some_stations_json(self):
+        response = requests.get("http://localhost:5000/stations")
+        self.assertIsInstance(response.json(), dict)
+    
+    def test_some_predictions_json(self):
+        response = requests.get("http://localhost:5000/predictions/2")
+        self.assertIsInstance(response.json(), dict)
+        
+    def test_some_forecast_json(self):
+        response = requests.get("http://localhost:5000/forecastModel/1")
+        self.assertIsInstance(response.json(), dict)
+    
+    def check_installation_files_exist(self):
+        self.check_installation_files_exist()
+        
+
+if __name__ == '__main__':
+    unittest.main()
+
