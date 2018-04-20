@@ -17,7 +17,7 @@ from flask_testing import TestCase
 from flask_testing import LiveServerTestCase
 
 """ Run main.py before running tests"""
-
+# code modified from https://pythonhosted.org/Flask-Testing/
 class MyTest(LiveServerTestCase):
 
     def create_app(self):
@@ -28,12 +28,12 @@ class MyTest(LiveServerTestCase):
         app.config['LIVESERVER_PORT'] = 0
 
         return app
-
     def test_server_is_up_and_running(self):
 
         response = urlopen('http://localhost:5000')
         # Check that localhost:5000 is running 
         self.assertEqual(response.code, 200)
+        
     # test that these app routings return json
     def test_some_chart_json(self):
         response = requests.get("http://localhost:5000/chart/8")
