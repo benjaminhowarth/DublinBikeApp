@@ -186,8 +186,11 @@ function initMap() {
 			initChart(station.number, station.address)
 		});
 	}
+	
 
 	$.getJSON(localAddress + "/stations", null, function (data) {
+		
+		
 		if ('stationJson' in data) {
 			var stations = data.stationJson;
 			for (var i = 0; i < stations.length; i++) {
@@ -209,8 +212,7 @@ function initMap() {
 	});
 
 	// Creating a search bar
-	// From:
-	// https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
+	// From: https://developers.google.com/maps/documentation/javascript/examples/places-searchbox
 	var input = document.getElementById('searchBar');
 	var searchBox = new google.maps.places.SearchBox(input);
 	map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
@@ -266,7 +268,6 @@ function initMap() {
 			$('#mapHeader').fadeIn(2000);
 		}; 
 	}, 2500);
-	
 }
 
 var chartGenerated = false;
@@ -275,16 +276,9 @@ var viewingAvgChart = true;
 function initChart(ChartStationNum, ChartStationAddress) {
 
 	document.getElementById("buttonDiv").style.display = 'flex'
-
+		
 	$.getJSON(localAddress + "chart/" + ChartStationNum, function (json) {
-
-		var Mon = json['Monday'];
-		var Tue = json['Tuesday'];
-		var Wed = json['Wednesday'];
-		var Thu = json['Thursday'];
-		var Fri = json['Friday'];
-		var Sat = json['Saturday'];
-		var Sun = json['Sunday'];
+	
 		document.getElementById("avgChartBtn").innerHTML = "Average";
 		document.getElementById("avgChartBtn").disabled = false;
 
@@ -292,13 +286,14 @@ function initChart(ChartStationNum, ChartStationAddress) {
 		if (chartGenerated == true && viewingAvgChart == true) {
 			chart.load({
 				columns: [
-					['Monday'].concat(Mon),
-					['Tuesday'].concat(Tue),
-					['Wednesday'].concat(Wed),
-					['Thursday'].concat(Thu),
-					['Friday'].concat(Fri),
-					['Saturday'].concat(Sat),
-					['Sunday'].concat(Sun)
+					// The first element of a c3.js column is the name of the column
+					['Monday'].concat(json['Monday']),
+					['Tuesday'].concat(json['Tuesday']),
+					['Wednesday'].concat(json['Wednesday']),
+					['Thursday'].concat(json['Thursday']),
+					['Friday'].concat(json['Friday']),
+					['Saturday'].concat(json['Saturday']),
+					['Sunday'].concat(json['Sunday'])
 				]
 			});
 			document.getElementById('stationChartTitle').innerHTML = "Available Bikes at " + ChartStationAddress;
@@ -307,13 +302,13 @@ function initChart(ChartStationNum, ChartStationAddress) {
 				bindto: document.getElementById("chart"),
 				data: {
 					json: {
-						Monday: Mon,
-						Tuesday: Tue,
-						Wednesday: Wed,
-						Thursday: Thu,
-						Friday: Fri,
-						Saturday: Sat,
-						Sunday: Sun
+						Monday: json['Monday'],
+						Tuesday: json['Tuesday'],
+						Wednesday: json['Wednesday'],
+						Thursday: json['Thursday'],
+						Friday: json['Friday'],
+						Saturday: json['Saturday'],
+						Sunday: json['Sunday']
 					},
 					type: 'spline'
 				},
@@ -343,13 +338,13 @@ function initChart(ChartStationNum, ChartStationAddress) {
 				bindto: document.getElementById("chart"),
 				data: {
 					json: {
-						Monday: Mon,
-						Tuesday: Tue,
-						Wednesday: Wed,
-						Thursday: Thu,
-						Friday: Fri,
-						Saturday: Sat,
-						Sunday: Sun
+						Monday: json['Monday'],
+						Tuesday: json['Tuesday'],
+						Wednesday: json['Wednesday'],
+						Thursday: json['Thursday'],
+						Friday: json['Friday'],
+						Saturday: json['Saturday'],
+						Sunday: json['Sunday']
 					},
 					type: 'spline'
 				},
@@ -374,114 +369,30 @@ function initChart(ChartStationNum, ChartStationAddress) {
 
 		// Once the average chart has loaded or generated, begin fetching data for each day of the predicted chart and storing the data in arrays
 		$.getJSON(localAddress + "forecastModel/" + ChartStationNum, function (jsonP) {
-
-			var MondayArray = [];
-			// If there is no JSON object for a day (the object is undefined) and the object is indexed, this will throw an error. 
-			if (jsonP["Monday"] != undefined) {
-				for (i = 0; i <= 21; i += 3) {
-					// All arrays must be of equal length for C3.js to correctly generate a chart
-					if (jsonP["Monday"][i] == undefined) {
-						MondayArray.push(null);
-					} else {
-						var keyMon = jsonP["Monday"][i];
-						MondayArray.push(keyMon);
-					}
+	
+			var predDays = ["Monday", "Tuesday", "Wednesday", "Thursday","Friday","Saturday", "Sunday"];
+			var actualDays = []
+			
+			for (i=0; i<predDays.length; i++){
+				if (jsonP[predDays[i]] != undefined){
+					actualDays.push(predDays[i]);
 				}
 			}
-
-			var TuesdayArray = [];
-			if (jsonP["Tuesday"] != undefined) {
-				for (i = 0; i <= 21; i += 3) {
-					if (jsonP["Tuesday"][i] == undefined) {
-						TuesdayArray.push(null);
-					} else {
-						var keyTue = jsonP["Tuesday"][i];
-						TuesdayArray.push(keyTue);
-					}
-				}
+		
+			var chartDict = {}
+			for (i = 0; i< actualDays.length; i++ ) {
+				chartDict[actualDays[i]] = Object.values(jsonP[actualDays[i]])
 			}
-
-			var WednesdayArray = [];
-			if (jsonP["Wednesday"] != undefined) {
-				for (i = 0; i <= 21; i += 3) {
-					if (jsonP["Wednesday"][i] == undefined) {
-						WednesdayArray.push(null);
-					} else {
-						var keyWed = jsonP["Wednesday"][i];
-						WednesdayArray.push(keyWed);
-					}
-				}
-			}
-
-			var ThursdayArray = [];
-			if (jsonP["Thursday"] != undefined) {
-
-				for (i = 0; i <= 21; i += 3) {
-					if (jsonP["Thursday"][i] == undefined) {
-						ThursdayArray.push(null);
-					} else {
-						var keyThu = jsonP["Thursday"][i];
-						ThursdayArray.push(keyThu);
-					}
-				}
-			}
-
-			var FridayArray = [];
-			if (jsonP["Friday"] != undefined) {
-
-				for (i = 0; i <= 21; i += 3) {
-					if (jsonP["Friday"][i] == undefined) {
-						FridayArray.push(null);
-					} else {
-						var keyFri = jsonP["Friday"][i];
-						FridayArray.push(keyFri);
-					}
-				}
-			}
-
-			var SaturdayArray = [];
-			if (jsonP["Saturday"] != undefined) {
-
-				for (i = 0; i <= 21; i += 3) {
-					if (jsonP["Saturday"][i] == undefined) {
-						SaturdayArray.push(null);
-					} else {
-						var keySat = jsonP["Saturday"][i];
-						SaturdayArray.push(keySat);
-					}
-				}
-			}
-
-			var SundayArray = [];
-			if (jsonP["Sunday"] != undefined) {
-
-				for (i = 0; i <= 21; i += 3) {
-					if (jsonP["Sunday"][i] == undefined) {
-						SundayArray.push(null);
-					} else {
-						var keySun = jsonP["Sunday"][i];
-						SundayArray.push(keySun);
-					}
-				}
-			}
-
+			
 			document.getElementById("predChartBtn").innerHTML = "Predicted";
 			document.getElementById("predChartBtn").disabled = false;
-			
+
 			predChartBtn.onclick = function () {
 				viewingAvgChart = false;
 				chart = c3.generate({
 					bindto: document.getElementById("chart"),
 					data: {
-						json: {
-							Monday: MondayArray,
-							Tuesday: TuesdayArray,
-							Wednesday: WednesdayArray,
-							Thursday: ThursdayArray,
-							Friday: FridayArray,
-							Saturday: SaturdayArray,
-							Sunday: SundayArray
-						},
+						json: chartDict,
 						type: 'spline'
 					},
 					axis: {
